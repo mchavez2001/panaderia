@@ -1,0 +1,34 @@
+name: PHP CI (Validación básica)
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Descarga tu repositorio
+      - name: Checkout del código
+        uses: actions/checkout@v4
+
+      # 2️⃣ Instala PHP (ajusta la versión si deseas otra)
+      - name: Configurar PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+
+      # 3️⃣ Verifica errores de sintaxis en todos los archivos PHP
+      - name: Verificar errores de sintaxis
+        run: |
+          echo "Validando archivos PHP..."
+          find . -type f -name "*.php" -print0 | xargs -0 -n1 php -l
+
+      # 4️⃣ (Opcional) Ejecuta una prueba de conexión o script de verificación
+      - name: Prueba manual básica
+        run: |
+          echo "Ejecutando prueba básica..."
+          php -r "echo '✅ PHP funciona correctamente en el entorno CI.';"
