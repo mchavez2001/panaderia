@@ -1,0 +1,69 @@
+/* Estilos específicos para el modal */
+.modal-container {
+    font-family: 'Poppins', sans-serif;
+}
+
+.modal-header {
+    background-color: #034EBD;
+    color: white;
+    padding: 15px;
+    text-align: center;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 10px;
+}
+
+.modal-footer button {
+    background-color: #0869fa;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-footer button:hover {
+    background-color: #0049b6;
+}
+
+.modal-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.modal-form input,
+.modal-form select {
+    padding: 10px;
+    margin: 5px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.modal-form label {
+    margin-bottom: 5px;
+}
+
+.modal-form .modal-submit {
+    background-color: #2178FB;
+    border: none;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.modal-form .modal-submit:hover {
+    background-color: #0869fa;
+}

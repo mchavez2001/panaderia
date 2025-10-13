@@ -1,0 +1,18 @@
+#RewriteEngine On
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteRule ^ index.php [QSA,L]
+RewriteEngine On
+
+# Dejar pasar directamente archivos existentes
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Reescribir las rutas que incluyan "public/"
+RewriteRule ^public/(.*)$ /$1 [L]
+
+# Reescribir todo lo demás hacia index.php
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ index.php [QSA,L]
+

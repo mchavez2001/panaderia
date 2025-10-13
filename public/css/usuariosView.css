@@ -1,0 +1,693 @@
+body {
+    /* font-family: 'Poppins', sans-serif; */
+    font-family: 'Montserrat', sans-serif;
+    background-color: #f4f4f4;
+}
+
+.cuerpo {
+    margin: 0 auto;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+}
+
+h2 {
+    color: #888888;
+    text-transform: uppercase;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Encabezados de la tabla */
+table th {
+    background-color: #2C3E50; /* Fondo oscuro para encabezados */
+    color: #ffffff; /* Texto blanco */
+    padding: 12px;
+    text-align: center;
+}
+
+/* Celdas de la tabla */
+table td {
+    text-align: center;
+    padding: 16px;
+    border: 1px solid #dddddd;
+    background-color: #f7f9fc; /* Fondo suave */
+    transition: background-color 0.3s ease; /* Transición suave */
+}
+
+/* Pintar toda la fila en hover */
+table tr.elementos:hover td {
+    background-color: #dfe6e9; /* Fondo gris claro en hover */
+}
+
+/* Botón de agregar usuario */
+.create {
+    margin-top: 10px;
+    background-color: #0869fae5;
+    transition: .2s ease;
+    align-self: flex-end; /* Se mantiene la alineación anterior */
+    border-radius: 20px;
+    padding: 12px;
+    color: white !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.create:hover {
+    background-color: #0049b6e5; /* Azul más oscuro */
+    transform: scale(1.015);
+}
+
+/* Estilo del botón de edición */
+.edit {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* Color del ícono de edición */
+.edit .material-icons {
+    color: #3498db; /* Azul claro */
+    transition: color 0.2s ease;
+}
+
+.calcular {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* Color del ícono de edición */
+.calcular .material-icons {
+    color: #3498db; /* Azul claro */
+    transition: color 0.2s ease;
+}
+
+.editkgprecio {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* Color del ícono de edición */
+.editkgprecio .material-icons {
+    color: #3498db; /* Azul claro */
+    transition: color 0.2s ease;
+}
+
+/* Estilo del botón de productos */
+.productos {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* Color del ícono de productos */
+.productos .material-icons {
+    color: #0869fa; /* Azul claro */
+    transition: color 0.2s ease;
+}
+
+/* Cambia el color del ícono en hover */
+table tr.elementos:hover .productos .material-icons {
+    color: #0049b6; /* Azul más oscuro en hover */
+}
+
+/* Cambia el color del ícono en hover */
+table tr.elementos:hover .edit .material-icons {
+    color: #2980b9; /* Azul más oscuro en hover */
+}
+
+.hidden-mobile {
+    display: table-cell;
+}
+
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+    .hidden-mobile {
+        display: none;
+    }
+
+    table {
+        border: none;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    td {
+        padding: 10px;
+        font-size: 0.9rem;
+    }
+}
+
+.create,
+.edit, .productos {
+    border: none !important;
+    box-shadow: none !important;
+}
+.mobile-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+.card {
+    background: linear-gradient(to right, #f0f4ff, #e0e7ff);
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.card h3 {
+    color: #1e3a8a;
+    margin-bottom: 5px; /* Reducir el margen inferior */
+    font-size: 1.25em;
+}
+
+.card .client-id {
+    color: #4b5563; /* Color del ID */
+    margin-bottom: 10px; /* Espacio entre ID y fecha */
+    font-size: 0.9em; /* Tamaño de fuente del ID */
+}
+
+.card-date {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Espacio entre la fecha y los detalles */
+    color: #4b5563;
+}
+
+.card-date span {
+    margin-right: 5px; /* Espacio entre el icono de fecha y el texto */
+    font-size: 24px; /* Tamaño del icono de fecha */
+}
+
+.card-details {
+    display: flex;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.card-detail {
+    display: flex;
+    align-items: center;
+    margin-right: 15px; /* Espacio entre los detalles */
+}
+
+.card-detail span {
+    font-size: 24px;
+    color: #3b82f6;
+    margin-right: 5px; /* Espacio entre el icono y el texto */
+}
+
+.card-detail p {
+    margin: 0; /* Eliminar margen del párrafo para alineación */
+}
+
+.card-actions {
+    display: flex;
+    justify-content: flex-end; /* Alinear botones a la derecha */
+    margin-top: 10px;
+}
+
+.edit, .btn-delete {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px; /* Espacio entre los botones */
+}
+
+/* Media Queries para dispositivos móviles */
+@media (max-width: 768px) {
+    .table-container {
+        display: none; /* Ocultar tabla en móviles */
+    }
+
+    .mobile-cards {
+        display: grid; /* Mostrar tarjetas en móviles */
+    }
+}
+
+@media (min-width: 769px) {
+    .mobile-cards {
+        display: none; /* Ocultar tarjetas en escritorio */
+    }
+}
+.card-date {
+    display: flex; /* Alinea el icono y el texto en fila */
+    align-items: center; /* Alinea verticalmente el icono y el texto */
+}
+
+.card-date .material-icons {
+    margin-right: 5px; /* Espacio entre el icono y el texto */
+}
+.card-date {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px; /* Espacio entre la fecha y los detalles */
+    color: #4b5563;
+}
+
+.card-date span {
+    margin-right: 5px; /* Espacio entre el icono de fecha y el texto */
+    font-size: 24px; /* Tamaño del icono de fecha */
+    line-height: 24px; /* Alinear verticalmente el icono */
+}
+
+.card-date p {
+    margin: 0; /* Eliminar margen del párrafo para alineación */
+    line-height: 24px; /* Alinear verticalmente el texto */
+}
+.titulo-general {
+    font-size: 2rem; /* Aumentar el tamaño de la fuente */
+    color: #2C3E50; /* Color más oscuro para el título */
+    text-align: center; /* Centrar el título */
+    margin-bottom: 10px; /* Espacio inferior */
+    border-bottom: 2px solid #0869fa; /* Línea debajo del título */
+    padding-bottom: 10px; /* Espacio entre el texto y la línea */
+    font-weight: bold; /* Negrita para el título */
+}
+
+.subtitulo-general {
+    font-size: 1rem; /* Tamaño de fuente para el subtítulo */
+    color: #7d7d7d; /* Color gris para el subtítulo */
+    text-align: center; /* Centrar el subtítulo */
+    margin-bottom: 20px; /* Espacio inferior */
+}
+/* Botón de calcular (ajustar según lo que necesites) */
+.calcular {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important; /* Asegúrate de que sea transparente */
+    padding: 8px;
+    cursor: pointer;
+    margin: 0; /* Asegura que no haya margen que cause separación */
+}
+
+/* Asegúrate de que todos los botones tengan el mismo estilo */
+.edit,
+.productos,
+.calcular, /* Añadir el botón de calcular aquí si es necesario */
+.detail { /* Asegúrate de que este sea el selector correcto */
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important; /* Botón sin fondo */
+    padding: 8px;
+    cursor: pointer;
+}
+
+/* Estilo del ícono en el botón de ventaproducto */
+.detail .material-icons {
+    color: #3498db; /* Color del ícono */
+    transition: color 0.2s ease;
+}
+
+/* Cambia el color del ícono en hover */
+table tr.elementos:hover .detail .material-icons {
+    color: #0049b6; /* Color más oscuro al pasar el ratón */
+}
+
+/* Alineación de botones en la clase card-actions */
+.card-actions {
+    display: flex;
+    justify-content: flex-end; /* Alinea todos los botones a la derecha */
+    margin-top: 10px;
+}
+
+/* Eliminar márgenes entre botones */
+.edit, .btn-delete, .detail {
+    background: none;
+    border: none;
+    cursor: pointer;
+    margin-left: 10px; /* Espacio entre los botones, ajusta según sea necesario */
+    padding: 0; /* Asegúrate de que no haya padding extra */
+}
+.productos {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* Ajusta según sea necesario */
+    margin-left: 10px; /* Asegúrate de que todos tengan el mismo margen */
+}
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+}
+
+.cuerpo {
+    margin: 0 auto;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+}
+
+h2 {
+    color: #888888;
+    text-transform: uppercase;
+}
+
+.search-container {
+    margin: 20px 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+#searchInput {
+    width: 80%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+}
+
+#searchInput::placeholder {
+    color: #999;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+table th {
+    background-color: #2C3E50;
+    color: #ffffff;
+    padding: 12px;
+    text-align: center;
+}
+
+table td {
+    text-align: center;
+    padding: 16px;
+    border: 1px solid #dddddd;
+    background-color: #f7f9fc;
+    transition: background-color 0.3s ease;
+}
+
+table tr.elementos:hover td {
+    background-color: #dfe6e9;
+}
+
+.create {
+    margin-top: 10px;
+    background-color: #0869fa;
+    transition: .2s ease;
+    align-self: flex-end;
+    border-radius: 20px;
+    padding: 12px;
+    color: white !important;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+}
+
+.create:hover {
+    background-color: #0049b6;
+    transform: scale(1.015);
+}
+
+.edit, .productos, .confirm {
+    border: none !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding: 8px;
+    cursor: pointer;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f4f4f4;
+}
+
+.cuerpo {
+    margin: 0 auto;
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+}
+
+h2 {
+    color: #888888;
+    text-transform: uppercase;
+}
+
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    margin-top: 20px;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+/* Encabezados de la tabla */
+table th {
+    background-color: #2C3E50; /* Fondo oscuro para encabezados */
+    color: #ffffff; /* Texto blanco */
+    padding: 12px;
+    text-align: center;
+}
+
+/* Celdas de la tabla */
+table td {
+    text-align: center;
+    padding: 16px;
+    border: 1px solid #dddddd;
+    background-color: #f7f9fc; /* Fondo suave */
+    transition: background-color 0.3s ease; /* Transición suave */
+}
+
+/* Pintar toda la fila en hover */
+table tr.elementos:hover td {
+    background-color: #dfe6e9; /* Fondo en hover */
+}
+
+/* Estilos para los cards en móvil */
+.mobile-cards {
+    display: none;
+}
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 10px 0;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.card-title {
+    font-size: 1.5em;
+    margin: 0;
+    font-weight: 600;
+    color: #2C3E50;
+}
+
+.card-details {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.card-detail {
+    display: flex;
+    align-items: center;
+}
+
+.card-detail span {
+    margin-right: 8px; /* Espacio entre icono y texto */
+}
+
+/* Acciones de la tarjeta */
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+}
+
+/* Estilos para el campo de búsqueda */
+.search-container {
+    margin-bottom: 20px;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    /* Mostrar las tarjetas en pantallas más pequeñas */
+    .table-container {
+        display: none; /* Ocultar tabla en móvil */
+    }
+    .mobile-cards {
+        display: flex; /* Mostrar tarjetas */
+        flex-direction: column;
+        width: 100%;
+    }
+}
+.card-id-date {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.client-id,
+.card-date {
+    font-size: 14px; /* Ajusta el tamaño si es necesario */
+    color: #333;
+}
+
+.card-date {
+    margin-left: 15px;
+}
+
+.create {
+    background-color: #0869fa; /* Color de fondo */
+    color: white; /* Color del texto */
+    border: none; /* Sin bordes */
+    border-radius: 30px; /* Bordes redondeados */
+    padding: 10px 20px; /* Espaciado interno */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra */
+    cursor: pointer; /* Cambiar cursor al pasar el mouse */
+    z-index: 1000; /* Asegura que esté por encima de otros elementos */
+}
+
+/* Estilos solo para móviles */
+@media (max-width: 768px) {
+    .create {
+        position: fixed; /* Fijo en la pantalla */
+        bottom: 20px; /* Espaciado desde el fondo */
+        right: 20px; /* Espaciado desde la derecha */
+        display: block; /* Mostrar en móviles */
+    }
+}
+.cuerpo {
+    margin: 0 auto;
+    margin-top: 20px;
+    margin-bottom: 80px; /* Ajusta el valor según sea necesario */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    margin-top: 80px;
+}
+button.create {
+    display: flex; /* Usar flexbox para el botón */
+    align-items: center; /* Alinear verticalmente */
+    justify-content: center; /* Centrar el contenido horizontalmente */
+    padding: 10px; /* Espaciado interno */
+    background-color: #0869fa; /* Fondo del botón */
+    color: white; /* Color del texto */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambiar el cursor al pasar el mouse */
+}
+
+button.create .material-icons {
+    margin-right: 5px; /* Espaciado entre el icono y el texto */
+    vertical-align: middle; /* Alinear el icono en el medio */
+}
+.back{
+    position: absolute;
+    color:white;
+    background-color: #0869fa;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 15px;
+    margin-left: 15px;
+    transition: .2s ease all;
+}
+.back:hover{
+    color:white;
+    background-color: #0869fa;
+    transform: scale(1.05);
+}
+.concepto{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin: 10px 0;
+}
+.box-concepto{
+    background-color: white;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 10px;
+    border-radius: 10px;
+    font-size: .75rem;
+}
+.box-content{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 135px;
+}
+.iconcepto{
+    align-content: center;
+    width: 15%;
+}

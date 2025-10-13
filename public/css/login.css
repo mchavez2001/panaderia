@@ -1,0 +1,128 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+body, html {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #F3F4F6;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Box Styling */
+.box {
+    width: 100%;
+    max-width: 500px;  /* Ancho máximo aumentado */
+    background: #ffffff;
+    border-radius: 16px;  /* Redondeado un poco más */
+    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.15);  /* Sombra aumentada */
+    padding: 40px;  /* Espaciado interno más amplio */
+    margin: 20px;
+    transition: transform 0.3s ease;  /* Efecto suave al hacer hover */
+}
+
+.box:hover {
+    transform: scale(1.02);  /* Agrandar ligeramente al hacer hover */
+}
+
+h2 {
+    font-weight: 600;
+    font-size: 26px;  /* Aumentado el tamaño */
+    text-align: center;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+.line {
+    height: 2px;  /* Línea más gruesa */
+    width: 100px;
+    background: #dddddd;
+    margin: 15px auto 30px;
+}
+
+/* Form Styling */
+.formulario {
+    display: flex;
+    flex-direction: column;
+}
+
+input {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 15px;  /* Aumentado el padding */
+    margin: 15px 0;  /* Separación entre inputs */
+    transition: border 0.3s ease;
+    font-size: 16px;  /* Tamaño de fuente más grande */
+}
+
+input:focus {
+    border: 1px solid #0869fa;
+    outline: none;
+}
+
+button {
+    background-color: #0869fa;
+    border: none;
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 15px;  /* Aumentado el padding del botón */
+    font-weight: 500;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+button:hover {
+    background-color: #0654c8;
+    transform: translateY(-2px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .box {
+        max-width: 90%;  /* Ampliar el contenedor en pantallas pequeñas */
+    }
+
+    h2 {
+        font-size: 22px;  /* Ajuste de título para móviles */
+    }
+
+    input, button {
+        font-size: 14px;  /* Ajuste de texto para móviles */
+    }
+}
+
+@media (max-width: 480px) {
+    .box {
+        max-width: 100%;  /* Contenedor a todo el ancho */
+        padding: 30px;  /* Espaciado interno reducido */
+    }
+
+    h2 {
+        font-size: 20px;
+    }
+
+    input, button {
+        font-size: 12px;  /* Tamaño de fuente más pequeño */
+    }
+
+    button {
+        padding: 12px;
+    }
+}

@@ -1,0 +1,100 @@
+/* Estilos generales */
+.bodyForm {
+    font-family: 'Poppins', sans-serif; /* Fuente general */
+    background-color: #f9f9f9; /* Color de fondo suave */
+    margin: 0;
+    display: flex; /* Usar flexbox para centrar el modal */
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* Ocupa toda la altura de la ventana */
+}
+
+/* Contenedor principal del modal */
+.modal-content {
+    background-color: #fff; /* Color de fondo del modal */
+    width: 100%; /* Asegurar que el modal ocupe el 100% del ancho */
+    height: 100%; /* Asegurar que el modal ocupe el 100% de la altura */
+    padding: 20px; /* Espaciado interno */
+}
+
+/* Título del formulario */
+.form-title {
+    font-size: 24px; /* Tamaño de la fuente del título */
+    text-align: center; /* Centrar el texto */
+    margin-bottom: 10px; /* Espacio debajo del título */
+    color: #333; /* Color del texto */
+}
+
+/* Línea decorativa */
+.form-separator {
+    height: 1px;
+    background-color: #ccc; /* Color de la línea */
+    margin-bottom: 20px; /* Espacio debajo de la línea */
+}
+
+/* Estilos del formulario */
+.user-form {
+    padding: 0; /* Eliminar padding extra */
+}
+
+/* Contenedor para los inputs */
+.input-wrapper {
+    margin-bottom: 15px; /* Espacio entre inputs */
+}
+
+/* Estilos para inputs personalizados */
+.input-field {
+    width: 100%; /* Asegurar que el input ocupe el 100% */
+    border: 1px solid #ccc; /* Borde del input */
+    border-radius: 5px; /* Bordes redondeados */
+    font-size: 1rem; /* Tamaño de la fuente */
+    padding: 10px; /* Espaciado interno */
+    transition: border-color 0.3s ease; /* Transición para el enfoque */
+}
+
+.input-field:focus {
+    outline: none; /* Sin contorno por defecto */
+    border-color: #0869fa; /* Cambio de color del borde en enfoque */
+}
+
+/* Estilos para selects personalizados */
+.select-field {
+    font-size: 1rem; /* Tamaño de la fuente */
+    width: 100%; /* Asegurar que el select ocupe el 100% */
+    margin-bottom: 15px; /* Espacio entre selects */
+    padding: 10px; /* Espaciado interno */
+    border: 1px solid #ccc; /* Borde del select */
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: #fff; /* Fondo blanco */
+}
+
+/* Estilos para el botón personalizado */
+.create-button {
+    background-color: #0869fa; /* Color de fondo del botón */
+    color: white; /* Color del texto */
+    padding: 10px; /* Espaciado interno */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: background-color 0.3s ease; /* Transición para el color de fondo */
+    font-size: 1rem; /* Tamaño de la fuente */
+    width: 100%; /* Asegurar que el botón ocupe el 100% */
+}
+
+.create-button:hover {
+    background-color: #0049b6; /* Color de fondo en hover */
+}
+
+/* Ajustes Responsivos */
+@media (max-width: 600px) {
+    .modal-content {
+        width: 95%; /* Aumentar el ancho en pantallas pequeñas */
+        height: auto; /* Ajustar la altura automáticamente */
+    }
+}
+
+@media (max-width: 768px) {
+    .product-table {
+        display: none;
+    }
+}
