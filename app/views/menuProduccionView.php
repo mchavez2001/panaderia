@@ -20,6 +20,7 @@
         <!-- <a class="opcion" href="productos_produccion"><i class="fas fa-box"></i> Lista de Productos a Producir</a> -->
         <a class="opcion" href="calcular_produccion_base_productos"><i class="fas fa-calculator"></i> Generar y Calcular Producción (En Base a Productos)</a>
         <a class="opcion" href="distribucion_insumos"><i class="fas fa-chart-pie"></i> Distribución de Insumos y Cantidades</a>
+        <a class="opcion" href="merma_produccion"><i class="fas fa-box"></i> Registrar Merma </a>
         <a class="opcion" href="consumo_petroleo"><i class="fas fa-gas-pump"></i> Consumo Petroleo</a>
     </div>
 </body>
