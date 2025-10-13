@@ -405,4 +405,14 @@ switch ($path) {
             }
         }
         break;
+    case '/merma_produccion':
+        if (isset($_SESSION['user_id'])) {
+            $productos = $produccionController->obtenerCochesProduccion();
+            $rutaDelete = 'eliminar_coche';
+            require_once '../app/views/listaCochesProduccionView.php';
+            exit();
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
 }
