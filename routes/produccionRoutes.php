@@ -407,12 +407,72 @@ switch ($path) {
         break;
     case '/merma_produccion':
         if (isset($_SESSION['user_id'])) {
-            $productos = $produccionController->obtenerCochesProduccion();
+            $mermas = $produccionController->obtenerMermas();
             $rutaDelete = 'eliminar_merma';
-            require_once '../app/views/listaMermaProduccion.php';
+            require_once '../app/views/listaMermasView.php';
             exit();
         } else {
             header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/agregar_merma':
+        if (isset($_SESSION['user_id'])) {
+            require_once '../app/views/createMermaView.php';
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'guardar') {
+                    $currentDate = date('Y-m-d H:i:s');
+                    $merma = new Merma($_POST['producto'], $_POST['tamaño'], $_POST['cantidad'], $currentDate, $_POST['motivo'], '0');
+                    $produccionController->agregarMerma($merma);
+                    header("Location: /panaderia/public/merma_produccion");
+                    exit();
+                } else {
+                    header("Location: /panaderia/public/merma_produccion");
+                }
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/editar_merma':
+        if (isset($_SESSION['user_id'])) {
+            if (isset($query['id'])) {
+                $merma = $produccionController->obtenerMerma($query['id']);
+                $merma->setCodMerma($_GET['id']);
+                require_once '../app/views/editMermaView.php';
+            } else {
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    if ($_POST['action'] == 'update') {
+                        $merma = new Merma($_POST['producto'], $_POST['tamaño'], $_POST['cantidad'], $_POST['fecha'], $_POST['motivo'], $_POST['estado']);
+                        $merma->setCodMerma($_POST['cod_merma']);
+                        $produccionController->editarMerma($merma);
+                        header("Location: /panaderia/public/merma_produccion");
+                        exit();
+                    } else {
+                        header("Location: /panaderia/public/merma_produccion");
+                        exit();
+                    }
+                }
+                header("Location: /panaderia/public/usuarios");
+                exit();
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/eliminar_merma':
+        if (isset($_SESSION['user_id'])) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'eliminar') {
+                    $produccionController->eliminarMerma($_POST['id']);
+                    header("Location: /panaderia/public/merma_produccion");
+                    exit();
+                } else {
+                    header("Location: /panaderia/public/merma_produccion");
+                    exit();
+                }
+            } else {
+                header("Location: /panaderia/public/login");
+            }
         }
         break;
 }

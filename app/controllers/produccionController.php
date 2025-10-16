@@ -42,6 +42,29 @@ class ProduccionController
         $this->produccionDao->deleteCoche($id);
     }
 
+    public function obtenerMermas()
+    {
+        return $this->produccionDao->getMermaProduction();
+    }
+    
+    public function obtenerMerma($id)
+    {
+        return $this->produccionDao->findMermaByID($id);
+    }
+
+    public function agregarMerma($merma)
+    {
+        return $this->produccionDao->insertMerma($merma);
+    }
+    public function editarMerma($merma)
+    {
+        return $this->produccionDao->editMerma($merma);
+    }
+    public function eliminarMerma($id)
+    {
+        $this->produccionDao->deleteMerma($id);
+    }
+
     public function obtenerProductosProduccionporCoches($id)
     {
         return $this->produccionDao->getProductosForProductionbyCoches($id);

@@ -146,7 +146,114 @@ class ProduccionDao
             );
             $merma->setCodMerma($row['cod_merma']);
             $mermas[] = $merma;
-            return $mermas;
+        }
+        return $mermas;
+    }
+
+    public function findMermaByID($id)
+    {
+        $stmt = $this->conn->prepare("SELECT m.cod_merma, p.nom_prod, p.tam_prod, m.motivo, m.cantidad, m.fecha, m.estado FROM merma m INNER JOIN producto p ON m.cod_prod = p.cod_prod WHERE m.cod_merma = ?");
+        $stmt->bind_param("s", $id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $merma = new Merma(
+                $row['nom_prod'],
+                $row['tam_prod'],
+                $row['cantidad'],
+                $row['fecha'],
+                $row['motivo'],
+                $row['estado']
+            );
+            $merma->setCodMerma($row['cod_merma']);
+        }
+        return $merma;
+    }
+
+    public function insertMerma($merma){
+        #Iniciar Transaccion
+        $this->conn->begin_transaction();
+
+        try {
+            #Datos Tabla Producto
+            $nom_prod = $merma->getProducto();
+            $tam_prod = $merma->getTamaño();
+
+            $sql = "INSERT INTO producto (nom_prod, tam_prod) values (?,?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("ss", $nom_prod, $tam_prod);
+            $stmt->execute();
+            $cod_prod = $this->conn->insert_id;
+
+            #Datos Tabla Merma
+            $motivo = $merma->getMotivo();
+            $cantidad = $merma->getCantidad();
+            $fecha = $merma->getFecha();
+            $estado = $merma->getEstado();
+
+            $sql = "INSERT INTO merma (cod_prod, motivo, cantidad, fecha, estado) values (?,?,?,?,?)";
+            $stmt = $this->conn->prepare($sql);
+            $stmt->bind_param("isisi", $cod_prod, $motivo, $cantidad, $fecha, $estado);
+            $stmt->execute();
+
+            # Confirmar la transacción
+            $this->conn->commit();
+        } catch (Exception $e) {
+            # Revertir la transacción en caso de error
+            $this->conn->rollback();
+            throw $e;
+        }
+    }
+
+    public function editMerma($merma){
+        $cod_merma = $merma->getCodMerma();
+        $producto = $merma->getProducto();
+        $tamaño = $merma->getTamaño();
+        $motivo = $merma->getMotivo();
+        $cantidad = $merma->getCantidad();
+        $fecha = $merma->getFecha();
+        $estado = $merma->getEstado();
+
+        #Actualizar Producto
+        $sql = "UPDATE merma m INNER JOIN producto p ON m.cod_prod = p.cod_prod SET p.nom_prod = ?, p.tam_prod = ?, m.motivo = ?, m.cantidad = ?, m.fecha = ?, m.estado = ? WHERE m.cod_merma = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("sssisii", $producto, $tamaño, $motivo, $cantidad, $fecha, $estado, $cod_merma);
+        $stmt->execute();
+    }
+
+    public function deleteMerma($id)
+    {
+        #Iniciar Transaccion
+        $this->conn->begin_transaction();
+
+        try {
+            #Primero buscamos el cod_prod en la tabla merma para eliminarlo
+            $stmt = $this->conn->prepare("SELECT * FROM merma WHERE cod_merma = ?");
+            $stmt->bind_param("s", $id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+            #Variables de la tabla:
+            #cod_merma
+            #cod_prod
+
+            $cod_prod = $row['cod_prod'];
+
+            #Eliminar Merma
+            $stmt = $this->conn->prepare("DELETE FROM merma WHERE cod_merma = ?");
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+
+            #Eliminar Producto
+            $stmt = $this->conn->prepare("DELETE FROM producto WHERE cod_prod = ?");
+            $stmt->bind_param("i", $cod_prod);
+            $stmt->execute();
+            # Confirmar la transacción
+            $this->conn->commit();
+        } catch (Exception $e) {
+            # Revertir la transacción en caso de error
+            $this->conn->rollback();
+            throw $e;
         }
     }
 
