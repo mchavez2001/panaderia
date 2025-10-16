@@ -3,6 +3,7 @@ require_once '../config/dbcn.php';
 require_once '../app/models/Producto.php';
 require_once '../app/models/Insumo.php';
 require_once '../app/models/Produccion.php';
+require_once '../app/models/Merma.php';
 class ProduccionDao
 {
     private $conn;
@@ -128,7 +129,29 @@ class ProduccionDao
         }
     }
 
-    public function getProductosForProductionbyCoches($id){
+    public function getMermaProduction()
+    {
+        $mermas = array();
+        $stmt = $this->conn->prepare("SELECT m.cod_merma, p.nom_prod, p.tam_prod, m.motivo, m.cantidad, m.fecha, m.estado FROM merma m INNER JOIN producto p ON m.cod_prod = p.cod_prod WHERE m.estado = 0");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $merma = new Merma(
+                $row['nom_prod'],
+                $row['tam_prod'],
+                $row['cantidad'],
+                $row['fecha'],
+                $row['motivo'],
+                $row['estado']
+            );
+            $merma->setCodMerma($row['cod_merma']);
+            $mermas[] = $merma;
+            return $mermas;
+        }
+    }
+
+    public function getProductosForProductionbyCoches($id)
+    {
         $productos = array();
         $stmt = $this->conn->prepare("SELECT c.cod_coche, pr.unidades, pr.cod_procc, p.nom_prod, p.dscr_prod, p.tam_prod, pr.cant_procc, pr.cant_extra from coche c inner join coche_to_produccion ctp on c.cod_coche = ctp.cod_coche inner join produccion pr on ctp.cod_procc = pr.cod_procc inner join productotoproducc ptp on pr.cod_procc = ptp.cod_procc inner join producto p on ptp.cod_prod = p.cod_prod WHERE pr.est = '0' and c.cod_coche = ?");
         $stmt->bind_param("i", $id);
