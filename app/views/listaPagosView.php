@@ -55,6 +55,7 @@
                     <tr>
                         <th>ID Pago</th>
                         <th>Servicio</th>
+                        <th>Proveedor</th>
                         <th>Descripcion</th>
                         <th>Cantidad</th>
                         <th>Unidad</th>
@@ -71,6 +72,7 @@
                         <tr class="elementos">
                             <td><?php echo ($pago->getCod_pago()) ?></td>
                             <td><?php echo ($pago->getCod_servicio()) ?></td>
+                            <td><?php echo ($pago->getProveedor()) ?></td>
                             <td><?php echo ($pago->getDscr()) ?></td>
                             <td><?php echo ($pago->getCantidad()) ?></td>
                             <td><?php echo ($pago->getTip_unidad()) ?></td>
@@ -99,7 +101,7 @@
                 <div class="card" onclick="event.stopPropagation();">
                     <h3 class="card-title">
                         <span class="material-icons" style="vertical-align: middle; color: #0869fa; margin-right: 4px;">payments</span>
-                        <?php echo ('ID '.$pago->getCod_pago().': '.$pago->getCod_servicio()) ?>
+                        <?php echo ('ID ' . $pago->getCod_pago() . ': ' . $pago->getCod_servicio()) ?>
                     </h3>
                     <hr />
                     <div class="card-details">
@@ -109,7 +111,8 @@
                         </div>
                         <!-- <div class="card-detail">
                             <span class="material-icons">straighten</span>
-                            <p><?php #echo ($pago->getTip_unidad()) ?></p>
+                            <p><?php #echo ($pago->getTip_unidad()) 
+                                ?></p>
                         </div> -->
                         <div class="card-detail">
                             <span class="material-icons">credit_card</span>
@@ -118,6 +121,10 @@
                         <div class="card-detail">
                             <span class="material-icons">event</span>
                             <p><?php echo ($pago->getFecha_pago()) ?></p>
+                        </div>
+                        <div class="card-detail">
+                            <span class="material-icons">local_shipping</span>
+                            <p><?php echo ($pago->getProveedor()) ?></p>
                         </div>
                     </div>
 
@@ -133,10 +140,27 @@
                     </div>
 
                     <div class="card-actions">
-                        <button type="button" class="detail" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($pago->getCod_pago()); ?>">
+                        <!-- <button type="button" class="detail" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php #echo ($pago->getCod_pago()); ?>">
                             <span class="material-icons" style="color: #0869fa;">visibility</span>
-                        </button>
-                        <!-- <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php #echo ($pago->getCod_pago()); ?>" onclick="event.stopPropagation();">
+                        </button> -->
+                        <?php if ($pago->getDetalle_producto()) { ?>
+                            <form action="/panaderia/public/pago_detalle_producto" method="get" style="display:inline;">
+                                <input type="hidden" name="id" value="<?php echo ($pago->getCod_pago()); ?>">
+                                <button type="submit" class="productos">
+                                    <span class="material-icons" style="color: #0869fa;">shopping_bag</span>
+                                </button>
+                            </form>
+                        <?php } ?>
+                        <?php if ($pago->getDetalle()) { ?>
+                            <form action="/panaderia/public/pago_detalle" method="get" style="display:inline;">
+                                <input type="hidden" name="id" value="<?php echo ($pago->getCod_pago()); ?>">
+                                <button type="submit" class="productos">
+                                    <span class="material-icons" style="color: #0869fa;">list_alt</span>
+                                </button>
+                            </form>
+                        <?php } ?>
+                        <!-- <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php #echo ($pago->getCod_pago()); 
+                                                                                                                                ?>" onclick="event.stopPropagation();">
                             <span class="material-icons">edit</span>
                         </button> -->
                         <button type="button" class="btn-delete" data-id="<?php echo ($pago->getCod_pago()); ?>" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="event.stopPropagation();">
