@@ -28,6 +28,9 @@
                         </select><br>
                     </div>
                     <div class="input-wrapper">
+                        <input class="input-field" placeholder="Proveedor" type="text" id="proveedor" name="proveedor">
+                    </div>
+                    <div class="input-wrapper">
                         <input class="input-field" placeholder="Descripcion" type="text" id="dscr" name="dscr">
                     </div>
                     <div class="input-wrapper">
@@ -58,6 +61,16 @@
                     <div class="input-wrapper">
                         <label for="precio">Fecha de Pago:</label>
                         <input type="date" id="fecha" name="fecha" class="input-field">
+                    </div>
+                    <div class="input-wrapper">
+                        <label for="detalle">¿Incluir detalles de pago?
+                            <input class="check" type="checkbox" name="detalle" id="detalle">
+                        </label>
+                    </div>
+                    <div class="input-wrapper">
+                        <label for="detalle">¿Incluir detalles de producto?
+                            <input class="check" type="checkbox" name="detalle_producto" id="detalle_producto">
+                        </label>
                     </div>
                     <button class="create-button" type="submit" name="action" value="guardar">Añadir Pago</button>
                 </form>

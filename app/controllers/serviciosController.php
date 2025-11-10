@@ -50,6 +50,44 @@ class ServiciosController{
     {
         $this->servicioDao->deletePago($cod_pago);
     }
+    public function obtenerPagoDetalles($cod_pago){
+        return $this->servicioDao->getPagoDetalles($cod_pago);
+    }
+    public function obtenerPagoDetalle($cod_pago_detalle){
+        return $this->servicioDao->getPagoDetalle($cod_pago_detalle);
+    }
+    public function agregarPagoDetalle($pago_detalle)
+    {
+        $this->servicioDao->addPagoDetalle($pago_detalle);
+    }
+    public function editarPagoDetalle($pago_detalle)
+    {
+        $this->servicioDao->updatePagoDetalle($pago_detalle);
+    }
+    public function eliminarPagoDetalle($cod_pago_detalle)
+    {
+        $this->servicioDao->deletePagoDetalle($cod_pago_detalle);
+    }
+
+
+    public function obtenerPagoDetallesProductos($cod_pago){
+        return $this->servicioDao->getPagoDetallesProductos($cod_pago);
+    }
+    public function obtenerPagoDetalleProducto($cod_pago_detalle_producto){
+        return $this->servicioDao->getPagoDetalleProducto($cod_pago_detalle_producto);
+    }
+    public function agregarPagoDetalleProducto($pago_detalle_producto)
+    {
+        $this->servicioDao->addPagoDetalleProducto($pago_detalle_producto);
+    }
+    public function editarPagoDetalleProducto($pago_detalle_producto)
+    {
+        $this->servicioDao->updatePagoDetalleProducto($pago_detalle_producto);
+    }
+    public function eliminarPagoDetalleProducto($cod_pago_detalle_producto)
+    {
+        $this->servicioDao->deletePagoDetalleProducto($cod_pago_detalle_producto);
+    }
 }
 
 ?>

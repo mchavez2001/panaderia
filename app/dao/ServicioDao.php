@@ -5,6 +5,8 @@ require_once '../app/models/SubCategoria.php';
 require_once '../app/models/Categoria_Det.php';
 require_once '../app/models/Servicio.php';
 require_once '../app/models/Pago.php';
+require_once '../app/models/Pago_Detalle.php';
+require_once '../app/models/Pago_Detalle_Producto.php';
 class ServicioDao
 {
     private $conn;
@@ -145,19 +147,22 @@ class ServicioDao
     public function getPagos()
     {
         $pagos = array();
-        $stmt = $this->conn->prepare("SELECT * FROM pago");
+        $stmt = $this->conn->prepare("SELECT * FROM pago ORDER BY fecha_pago DESC");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
             $pago = new Pago(
                 $row['cod_servicio'],
+                $row['proveedor'],
                 $row['dscr'],
                 $row['cantidad'],
                 $row['tip_unidad'],
                 $row['met_pag'],
                 $row['pago_uni'],
                 $row['pago_tot'],
-                $row['fecha_pago']
+                $row['fecha_pago'],
+                $row['detalle'],
+                $row['detalle_producto']
             );
             $pago->setCod_pago($row['cod_pago']);
             $pagos[] = $pago;
@@ -234,6 +239,7 @@ class ServicioDao
     public function addPago($pago)
     {
         $cod_servicio = $pago->getCod_servicio();
+        $proveedor = $pago->getProveedor();
         $dscr = $pago->getDscr();
         $cantidad = $pago->getCantidad();
         $tip_unidad = $pago->getTip_unidad();
@@ -241,10 +247,12 @@ class ServicioDao
         $pago_uni = $pago->getPago_uni();
         $pago_tot = $pago->getPago_tot();
         $fecha_pago = $pago->getFecha_pago();
+        $detalle = $pago->getDetalle();
+        $detalle_producto = $pago->getDetalle_producto();
 
-        $sql = "INSERT INTO pago (cod_servicio, dscr, cantidad, tip_unidad, met_pag, pago_uni, pago_tot, fecha_pago) values (?,?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO pago (cod_servicio, proveedor, dscr, cantidad, tip_unidad, met_pag, pago_uni, pago_tot, fecha_pago, detalle, detalle_producto) values (?,?,?,?,?,?,?,?,?,?,?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("isdssdds", $cod_servicio, $dscr, $cantidad, $tip_unidad, $met_pag, $pago_uni, $pago_tot, $fecha_pago);
+        $stmt->bind_param("issdssddsii", $cod_servicio, $proveedor, $dscr, $cantidad, $tip_unidad, $met_pag, $pago_uni, $pago_tot, $fecha_pago, $detalle, $detalle_producto);
         $stmt->execute();
     }
     public function deletePago($cod_pago)
@@ -252,6 +260,141 @@ class ServicioDao
         $sql = "DELETE FROM pago WHERE cod_pago = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $cod_pago);
+        $stmt->execute();
+    }
+    public function getPagoDetalles($cod_pago)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM pago_detalle WHERE cod_pago = ?");
+        $stmt->bind_param("i", $cod_pago);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $detalles = array();
+        while ($row = $result->fetch_assoc()) {
+            $detalle = new Pago_Detalle(
+                $row['cod_pago'],
+                $row['nombre'],
+                $row['monto'],
+            );
+            $detalle->setCod_pago_detalle($row['cod_pago_detalle']);
+            $detalles[] = $detalle;
+        }
+        return $detalles;
+    }
+    public function getPagoDetalle($cod_pago_detalle)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM pago_detalle WHERE cod_pago_detalle = ?");
+        $stmt->bind_param("i", $cod_pago_detalle);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $detalle = new Pago_Detalle(
+                $row['cod_pago'],
+                $row['nombre'],
+                $row['monto'],
+            );
+            $detalle->setCod_pago_detalle($row['cod_pago_detalle']);
+            return $detalle;
+        }
+        return null;
+    }
+    public function addPagoDetalle($pago_detalle)
+    {
+        $cod_pago = $pago_detalle->getCod_pago();
+        $nombre = $pago_detalle->getNombre();
+        $monto = $pago_detalle->getMonto();
+
+        $sql = "INSERT INTO pago_detalle (cod_pago, nombre, monto) values (?,?,?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("isd", $cod_pago, $nombre, $monto);
+        $stmt->execute();
+    }
+
+    public function updatePagoDetalle($pago_detalle)
+    {
+        $cod_pago_detalle = $pago_detalle->getCod_pago_detalle();
+        $nombre = $pago_detalle->getNombre();
+        $monto = $pago_detalle->getMonto();
+
+        $sql = "UPDATE pago_detalle SET nombre = ?, monto = ? WHERE cod_pago_detalle = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("sdi", $nombre, $monto, $cod_pago_detalle);
+        $stmt->execute();
+    }
+
+    public function deletePagoDetalle($cod_pago)
+    {
+        $sql = "DELETE FROM pago_detalle WHERE cod_pago = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $cod_pago);
+        $stmt->execute();
+    }
+
+    public function getPagoDetallesProductos($cod_pago)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM pago_productos WHERE cod_pago = ?");
+        $stmt->bind_param("i", $cod_pago);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $detalles = array();
+        while ($row = $result->fetch_assoc()) {
+            $detalle = new Pago_Detalle_Producto(
+                $row['cod_pago'],
+                $row['nombre'],
+                $row['cantidad'],
+                $row['monto']
+            );
+            $detalle->setCod_pago_detalle_producto($row['cod_pago_producto']);
+            $detalles[] = $detalle;
+        }
+        return $detalles;
+    }
+    public function getPagoDetalleProducto($cod_pago_detalle_producto)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM pago_productos WHERE cod_pago_producto = ?");
+        $stmt->bind_param("i", $cod_pago_detalle_producto);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($row = $result->fetch_assoc()) {
+            $detalle = new Pago_Detalle_Producto(
+                $row['cod_pago'],
+                $row['nombre'],
+                $row['cantidad'],
+                $row['monto']
+            );
+            $detalle->setCod_pago_detalle_producto($row['cod_pago_producto']);
+            return $detalle;
+        }
+        return null;
+    }
+    public function addPagoDetalleProducto($pago_detalle_producto)
+    {
+        $cod_pago = $pago_detalle_producto->getCod_pago();
+        $nombre = $pago_detalle_producto->getNombre();
+        $cantidad = $pago_detalle_producto->getCantidad();
+        $monto = $pago_detalle_producto->getMonto();
+
+        $sql = "INSERT INTO pago_productos (cod_pago, nombre, cantidad, monto) values (?,?,?,?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("isid", $cod_pago, $nombre, $cantidad, $monto);
+        $stmt->execute();
+    }
+    public function updatePagoDetalleProducto($pago_detalle_producto)
+    {
+        $cod_pago_detalle_producto = $pago_detalle_producto->getCod_pago_detalle_producto();
+        $nombre = $pago_detalle_producto->getNombre();
+        $cantidad = $pago_detalle_producto->getCantidad();
+        $monto = $pago_detalle_producto->getMonto();
+
+        $sql = "UPDATE pago_productos SET nombre = ?, cantidad = ?, monto = ? WHERE cod_pago_producto = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("sidi", $nombre, $cantidad, $monto, $cod_pago_detalle_producto);
+        $stmt->execute();
+    }
+    public function deletePagoDetalleProducto($cod_pago_detalle_producto)
+    {
+        $sql = "DELETE FROM pago_productos WHERE cod_pago_producto = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $cod_pago_detalle_producto);
         $stmt->execute();
     }
 }

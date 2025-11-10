@@ -138,7 +138,7 @@ switch ($path) {
         if (isset($_SESSION['user_id'])) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($_POST['action'] == 'guardar') {
-                    $pago = new Pago($_POST['servicio'], $_POST['dscr'], ($_POST['cantidad']), $_POST['unidad'], $_POST['met_pago'], $_POST['pago'], ($_POST['cantidad'] * floatval($_POST['pago'])), $_POST['fecha']);
+                    $pago = new Pago($_POST['servicio'], $_POST['proveedor'], $_POST['dscr'], ($_POST['cantidad']), $_POST['unidad'], $_POST['met_pago'], $_POST['pago'], ($_POST['cantidad'] * floatval($_POST['pago'])), $_POST['fecha'], isset($_POST['detalle']) ? 1 : 0, isset($_POST['detalle_producto']) ? 1 : 0);
                     $serviciosController->agregarPago($pago);
                     header("Location: /panaderia/public/lista_pagos");
                     exit();
@@ -217,4 +217,143 @@ switch ($path) {
             header("Location: /panaderia/public/login");
         }
         break;
+    case '/pago_detalle':
+        if (isset($_SESSION['user_id'])) {
+            if (isset($query['id'])) {
+                $rutaDelete = 'eliminar_pago_detalle';
+                $cod_pago = $query['id'];
+                $pago_detalles = $serviciosController->obtenerPagoDetalles($query['id']);
+                require_once '../app/views/listaPagosDetalleView.php';
+            } else {
+                header("Location: /panaderia/public/lista_pagos");
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/agregar_pago_detalle':
+        if (isset($_SESSION['user_id'])) {
+            $cod_pago = $query['id'];
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'guardar') {
+                    $pago_detalle = new Pago_Detalle($_POST['cod_pago'], ucwords(trim($_POST['nombre'])), $_POST['monto']);
+                    $serviciosController->agregarPagoDetalle($pago_detalle);
+                    header("Location: /panaderia/public/pago_detalle?id=" . $_POST['cod_pago']);
+                    exit();
+                } else {
+                    header("Location: /panaderia/public/lista_pagos");
+                    exit();
+                }
+            }
+            require_once '../app/views/createPagoDetalleView.php';
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/editar_pago_detalle':
+        if (isset($_SESSION['user_id'])) {
+            if (isset($query['id'])) {
+                $pago_detalle = $serviciosController->obtenerPagoDetalle($query['id']);
+                $pago_detalle->setCod_pago_detalle($query['id']);
+                require_once '../app/views/editPagoDetalleView.php';
+            } else {
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    if ($_POST['action'] == 'update') {
+                        $pago_detalle = new Pago_Detalle($_POST['cod_pago'], ucwords(trim($_POST['nombre'])), $_POST['monto']);
+                        $pago_detalle->setCod_pago_detalle($_POST['cod_pago_detalle']);
+                        #print_r($pago_detalle);
+                        $serviciosController->editarPagoDetalle($pago_detalle);
+                    }
+                }
+                header("Location: /panaderia/public/pago_detalle?id=" . $_POST['cod_pago']);
+                exit();
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+    case '/eliminar_pago_detalle':
+        if (isset($_SESSION['user_id'])) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'eliminar') {
+                    $serviciosController->eliminarPagoDetalle($_POST['id']);
+                    header("Location: /panaderia/public/pago_detalle?id=" . $_POST['cod_pago']);
+                    exit();
+                }
+            } else {
+                header("Location: /panaderia/public/login");
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/pago_detalle_producto':
+        if (isset($_SESSION['user_id'])) {
+            if (isset($query['id'])) {
+                $rutaDelete = 'eliminar_pago_detalle_producto';
+                $cod_pago = $query['id'];
+                $pago_detalles_productos = $serviciosController->obtenerPagoDetallesProductos($query['id']);
+                require_once '../app/views/listaPagosDetalleProductoView.php';
+            } else {
+                header("Location: /panaderia/public/lista_pagos");
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/agregar_pago_detalle_producto':
+        if (isset($_SESSION['user_id'])) {
+            $cod_pago = $query['id'];
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'guardar') {
+                    $pago_detalle_producto = new Pago_Detalle_Producto($_POST['cod_pago'], ucwords(trim($_POST['nombre'])), $_POST['cantidad'], $_POST['monto']);
+                    $serviciosController->agregarPagoDetalleProducto($pago_detalle_producto);
+                    header("Location: /panaderia/public/pago_detalle_producto?id=" . $_POST['cod_pago']);
+                    exit();
+                } else {
+                    header("Location: /panaderia/public/lista_pagos");
+                    exit();
+                }
+            }
+            require_once '../app/views/createPagoDetalleProductoView.php';
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/editar_pago_detalle_producto':
+        if (isset($_SESSION['user_id'])) {
+            if (isset($query['id'])) {
+                $pago_detalle = $serviciosController->obtenerPagoDetalle($query['id']);
+                $pago_detalle->setCod_pago_detalle($query['id']);
+                require_once '../app/views/editPagoDetalleProductoView.php';
+            } else {
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    if ($_POST['action'] == 'update') {
+                        $pago_detalle = new Pago_Detalle($_POST['cod_pago'], ucwords(trim($_POST['nombre'])), $_POST['monto']);
+                        $pago_detalle->setCod_pago_detalle($_POST['cod_pago_detalle']);
+                        #print_r($pago_detalle);
+                        $serviciosController->editarPagoDetalleProducto($pago_detalle);
+                    }
+                }
+                header("Location: /panaderia/public/pago_detalle_producto?id=" . $_POST['cod_pago']);
+                exit();
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+    case '/eliminar_pago_detalle_producto':
+        if (isset($_SESSION['user_id'])) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'eliminar') {
+                    $serviciosController->eliminarPagoDetalle($_POST['id']);
+                    header("Location: /panaderia/public/pago_detalle_producto?id=" . $_POST['cod_pago']);
+                    exit();
+                }
+            } else {
+                header("Location: /panaderia/public/login");
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    
 }
