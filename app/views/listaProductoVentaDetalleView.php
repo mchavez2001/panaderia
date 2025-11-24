@@ -13,10 +13,10 @@
 
 <body>
     <?php require_once 'nav.php'; ?>
-    <a class="back" href="registro_ventas">Volver</a>
+    <a class="back" href="producto_venta?id=<?php echo $cod_venta  ?>">Volver</a>
     <div class="cuerpo">
-        <h2 class="titulo-general">VENTA <?php echo ($cod_venta); ?></h2>
-        <p class="subtitulo-general">Lista de Productos</p>
+        <h2 class="titulo-general">PRODUCTO <?php echo ($cod_prod); ?></h2>
+        <p class="subtitulo-general">Lista de Detalles del Producto</p>
 
         <div class="table-container desktop-view">
             <table>
@@ -24,12 +24,8 @@
                     <tr>
                         <th>ID</th>
                         <th>Producto</th>
-                        <th>Descripción</th>
                         <th>Tamaño</th>
-                        <th>Bolsas</th>
-                        <th>Precio Unitario</th>
-                        <th>Precio Total</th>
-                        <th></th>
+                        <th>Cantidad</th>
                         <th></th>
                         <th></th>
                     </tr>
@@ -39,22 +35,8 @@
                         <tr class="elementos">
                             <td style="text-align: center;"><?php echo ($producto->getCod_prod()); ?></td>
                             <td><?php echo ($producto->getNom_prod()); ?></td>
-                            <td><?php echo ($producto->getDscr_prod()); ?></td>
                             <td><?php echo ($producto->getTam_prod()); ?></td>
                             <td style="text-align: center;"><?php echo ($producto->getCant_prod()); ?></td>
-                            <td><?php echo ('S/' . $producto->getPrecio()); ?></td>
-                            <td><?php echo ('S/' . $producto->getPrecio_Tot()); ?></td>
-                            <?php if ($producto->getDetalle()) { ?>
-                                <td>
-                                    <form action="/panaderia/public/producto_detalle" method="get">
-                                        <input type="hidden" name="id" value="<?php echo ($producto->getCod_prod()); ?>">
-                                        <input type="hidden" name="id_venta" value="<?php echo ($cod_venta); ?>">
-                                        <button type="submit" class="productos" value="editar">
-                                            <span class="material-icons" style="color: #0869fa;">inventory</span>
-                                        </button>
-                                    </form>
-                                </td>
-                            <?php } ?>
                             <td style="text-align: center;">
                                 <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($producto->getCod_prod()); ?>">
                                     <span class="material-icons" style="color: #0869fa;">edit</span>
@@ -76,30 +58,17 @@
                 <div class="card">
                     <h3 class="card-title">
                         <span class="material-icons" style="color: #0869fa;">inventory</span>
-                        <?php echo ($producto->getCant_prod() . ' ' . $producto->getNom_prod()) . ' ' . $producto->getTam_prod(); ?>
+                        <?php echo ($producto->getNom_prod() . ' ' . $producto->getTam_prod())?>
                     </h3>
                     <hr />
                     <p>
-                        <span class="material-icons" style="color: #0869fa;">attach_money</span>
-                        Precio Unitario: S/<?php echo ($producto->getPrecio()); ?>
-                    </p>
-                    <p>
-                        <span class="material-icons" style="color: #0869fa;">monetization_on</span>
-                        Precio Total: S/<?php echo ($producto->getPrecio_Tot()); ?>
+                        <span class="material-icons" style="color: #0869fa;">countertops</span>
+                        Unidades: <?php echo ($producto->getCant_prod()); ?>
                     </p>
                     <div class="card-actions">
                         <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($producto->getCod_prod()); ?>" onclick="event.stopPropagation();">
                             <span class="material-icons">edit</span>
                         </button>
-                        <?php if ($producto->getDetalle()) { ?>
-                            <form action="/panaderia/public/producto_detalle" method="get">
-                                <input type="hidden" name="id" value="<?php echo ($producto->getCod_prod()); ?>">
-                                <input type="hidden" name="id_venta" value="<?php echo ($cod_venta); ?>">
-                                <button type="submit" class="productos" value="editar">
-                                    <span class="material-icons" style="color: #0869fa;">inventory</span>
-                                </button>
-                            </form>
-                        <?php } ?>
                         <button type="button" class="btn-delete" data-id="<?php echo ($producto->getCod_prod()); ?>" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="event.stopPropagation();">
                             <span class="material-icons" style="color: red;">delete</span>
                         </button>
@@ -108,12 +77,12 @@
             <?php endforeach; ?>
         </div>
 
-        <button type="button" class="create" data-id="<?php echo ($cod_venta); ?>" data-bs-toggle="modal" data-bs-target="#crearModal" id="openModal">
+        <button type="button" class="create" data-id="<?php echo ($cod_prod); ?>" data-bs-toggle="modal" data-bs-target="#crearModal" id="openModal">
             <span class="material-icons" style="color: white;">add</span>Agregar Producto
         </button>
     </div>
 
-    <script src="../public/js/productoVentaView.js"></script>
+    <script src="../public/js/productoDetalleView.js"></script>
 </body>
 
 </html>

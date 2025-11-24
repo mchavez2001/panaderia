@@ -132,7 +132,7 @@ class ProduccionDao
     public function getMermaProduction()
     {
         $mermas = array();
-        $stmt = $this->conn->prepare("SELECT m.cod_merma, p.nom_prod, p.tam_prod, m.motivo, m.cantidad, m.fecha, m.estado FROM merma m INNER JOIN producto p ON m.cod_prod = p.cod_prod WHERE m.estado = 0");
+        $stmt = $this->conn->prepare("SELECT m.cod_merma, p.nom_prod, p.tam_prod, m.motivo, m.cantidad, m.fecha, m.estado FROM merma m INNER JOIN producto p ON m.cod_prod = p.cod_prod WHERE m.estado = 0 order by m.fecha DESC");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {

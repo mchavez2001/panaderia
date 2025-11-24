@@ -103,9 +103,13 @@ class ProductoController{
     public function obtenerTotalEntregasbyProducto($cod_prod){
         return $this->productoDao->getTotalEntregasbyProducto($cod_prod);
     } 
-/*     public function obtenerTotalAbonosbyVenta($cod_venta){
-        return $this->productoDao->getTotalAbonosbyVenta($cod_venta);
-    }  */
+    public function obtenerProductosDetalle($cod_prod)
+    {
+        return $this->productoDao->getProductosDetalle($cod_prod);
+    }
+    public function agregarProductobyDetalle($producto){
+        return $this->productoDao->insertProductobyDetalle($producto);
+    }
 }
 
 ?>

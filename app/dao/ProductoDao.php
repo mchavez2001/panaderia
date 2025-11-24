@@ -37,7 +37,7 @@ class ProductoDao
     public function getProductosbyVenta($cod_venta)
     {
         $productos = array();
-        $stmt = $this->conn->prepare("SELECT p.* FROM producto p INNER JOIN  ventaproducto vp ON p.cod_prod = vp.cod_prod INNER JOIN venta v ON v.cod_venta = vp.cod_venta WHERE v.cod_venta = ?");
+        $stmt = $this->conn->prepare("SELECT p.*, vp.detalle AS detalle FROM producto p INNER JOIN  ventaproducto vp ON p.cod_prod = vp.cod_prod INNER JOIN venta v ON v.cod_venta = vp.cod_venta WHERE v.cod_venta = ?");
         $stmt->bind_param("i", $cod_venta);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -53,6 +53,7 @@ class ProductoDao
             $producto->setPrecio_tot($row['precio_tot']);
             $producto->setEst($row['est']);
             $producto->setCod_prod($row['cod_prod']);
+            $producto->setDetalle($row['detalle']);
             $productos[] = $producto;
         }
         return $productos;
@@ -162,7 +163,8 @@ class ProductoDao
         $stmt->execute();
     }
 
-    public function addImporteSaldo($cod_prod, $addIngreso){
+    public function addImporteSaldo($cod_prod, $addIngreso)
+    {
         #Buscar relacion entre la venta y el producto
         $stmt = $this->conn->prepare("SELECT * FROM ventaproducto WHERE cod_prod = ?");
         $stmt->bind_param("i", $cod_prod);
@@ -417,9 +419,9 @@ class ProductoDao
         $stmt->execute();
         $result = $stmt->get_result();
         $mont_tot = $result->fetch_assoc();
-        if(!empty($mont_tot['din_abon'])){
+        if (!empty($mont_tot['din_abon'])) {
             return $mont_tot['din_abon'];
-        }else{
+        } else {
             return null;
         }
     }
@@ -432,5 +434,37 @@ class ProductoDao
         $result = $stmt->get_result();
         $mont_tot = $result->fetch_assoc();
         return $mont_tot['SUM(e.cant_entr)'];
+    }
+    public function getProductosDetalle($cod_prod)
+    {
+        $productos = array();
+        $stmt = $this->conn->prepare("SELECT pd.* from producto p inner join productodetalle pd on p.cod_prod = pd.cod_producto where p.cod_prod = ?");
+        $stmt->bind_param("i", $cod_prod);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $producto = new Producto(
+                $row['nom_producto'],
+                '',
+                '',
+                $row['tamaño_producto'],
+                $row['cantidad']
+            );
+            $producto->setCod_prod($row['cod_productodetalle']);
+            $productos[] = $producto;
+        }
+        return $productos;
+    }
+    public function insertProductobyDetalle($producto)
+    {
+        $nom_producto = $producto->getNom_prod();
+        $tamaño_producto = $producto->getTam_prod();
+        $cantidad = $producto->getCant_prod();
+        $cod_producto = $producto->getCod_prod();
+        $sql = "INSERT INTO productodetalle (nom_producto, tamaño_producto, cantidad, cod_producto) values (?,?,?,?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ssii", $nom_producto, $tamaño_producto, $cantidad, $cod_producto);
+        $stmt->execute();
+        return $this->conn->insert_id;
     }
 }
