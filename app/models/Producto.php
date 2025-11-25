@@ -11,6 +11,7 @@ class Producto
     private $precio;
     private $precio_tot;
     private $est;
+    private $detalle;
 
     public function __construct($nom_prod, $dscr_prod, $cant_extra, $tam_prod, $cant_prod)
     {
@@ -124,6 +125,26 @@ class Producto
     public function setEst($est)
     {
         $this->est = $est;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of detalle
+     */ 
+    public function getDetalle()
+    {
+        return $this->detalle;
+    }
+
+    /**
+     * Set the value of detalle
+     *
+     * @return  self
+     */ 
+    public function setDetalle($detalle)
+    {
+        $this->detalle = $detalle;
 
         return $this;
     }

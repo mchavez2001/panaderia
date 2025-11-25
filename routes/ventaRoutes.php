@@ -248,7 +248,6 @@ switch ($path) {
             if (isset($query['id'])) {
                 $productos = $productoController->obtenerProductosbyVenta($query['id']);
                 $cod_venta = $_GET['id'];
-                $_SESSION['cod_ventaproducto'] = $cod_venta;
                 require_once '../app/views/listaProductoVentaView.php';
             } else {
                 header("Location: /panaderia/public/login");
@@ -270,7 +269,8 @@ switch ($path) {
                         $producto->setPrecio($_POST['precio']);
                         $producto->setPrecio_tot($_POST['precio'] * $_POST['cant']);
                         $cod_prod = $productoController->agregarProductobyVenta($producto);
-                        $ventasController->unirVentaProducto($cod_prod, $_POST['cod']);
+                        $detalle = isset($_POST['detalle']) ? 1 : 0;
+                        $ventasController->unirVentaProducto($cod_prod, $_POST['cod'], $detalle);
                         header("Location: /panaderia/public/producto_venta?id=" . $_POST['cod']);
                         exit();
                     } else {
@@ -321,6 +321,42 @@ switch ($path) {
                 }
             } else {
                 header("Location: /panaderia/public/login");
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/producto_detalle':
+        if (isset($_SESSION['user_id'])) {
+            if (isset($query['id'])) {
+                $cod_prod = $_GET['id'];
+                $cod_venta = $_GET['id_venta'];
+                $productos = $productoController->obtenerProductosDetalle($_GET['id']);
+                require_once '../app/views/listaProductoVentaDetalleView.php';
+            } else {
+                header("Location: /panaderia/public/login");
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/agregar_producto_detalle':
+        if (isset($_SESSION['user_id'])) {
+            if (isset($query['id'])) {
+                $cod_prod = $_GET['id'];
+                $cod_venta = $_GET['id_venta'];
+                require_once '../app/views/createProductoDetalleView.php';
+            } else {
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    if ($_POST['action'] == 'guardar') {
+                        $producto = new Producto($_POST['nombre'], 'N/A', 'N/A', $_POST['tamano'], $_POST['cant']);
+                        $producto->setCod_prod($_POST['cod_prod']);
+                        $cod_venta = $_POST['id_venta'];
+                        $productoController->agregarProductobyDetalle($producto);
+                        header("Location: /panaderia/public/producto_detalle?id=" . $_POST['cod_prod']."&id_venta=" . $cod_venta);
+                        exit();
+                    }
+                }
             }
         } else {
             header("Location: /panaderia/public/login");

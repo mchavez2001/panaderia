@@ -229,12 +229,12 @@ class VentaDao
         $stmt->execute();
     }
 
-    public function insertProductoOnVenta($cod_prod, $cod_venta)
+    public function insertProductoOnVenta($cod_prod, $cod_venta, $detalle)
     {
         #Enlazando producto a la venta del cliente
-        $sql = "INSERT INTO ventaproducto (cod_venta, cod_prod) values (?,?)";
+        $sql = "INSERT INTO ventaproducto (cod_venta, cod_prod, detalle) values (?,?,?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("ii", $cod_venta, $cod_prod);
+        $stmt->bind_param("iii", $cod_venta, $cod_prod, $detalle);
         $stmt->execute();
         #Obteniendo la venta para calcular el importe
         $ventaActu = $this->getVenta($cod_venta);

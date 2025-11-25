@@ -35,8 +35,8 @@ class VentasController{
         $this->ventasDao->deleteVenta($cod_venta);
     }
 
-    public function unirVentaProducto($cod_prod, $cod_venta){
-        $this->ventasDao->insertProductoOnVenta($cod_prod, $cod_venta);
+    public function unirVentaProducto($cod_prod, $cod_venta, $detalle){
+        $this->ventasDao->insertProductoOnVenta($cod_prod, $cod_venta, $detalle);
     }
 
     public function unirVentaProductoPedido($cod_prod, $cod_venta){

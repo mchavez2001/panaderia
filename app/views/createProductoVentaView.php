@@ -90,6 +90,7 @@
                         <option value="">Selecciona un producto...</option>
                         <option value="Pan">Pan</option>
                         <option value="Bizcocho">Bizcocho</option>
+                        <option value="Mixto">Mixto</option>
                     </select>
                 </div>
 
@@ -137,7 +138,11 @@
                     <label for="uni_med">Precio:</label>
                     <input type="text" id="precio" name="precio" class="input-field">
                 </div>
-
+                <div class="input-wrapper">
+                    <label for="detalle">¿Incluir detalles del producto?
+                        <input class="check" type="checkbox" name="detalle" id="detalle">
+                    </label>
+                </div>
                 <input type="hidden" id="cod" name="cod" value="<?php echo ($cod_venta); ?>">
 
                 <div class="input-wrapper">
