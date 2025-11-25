@@ -76,8 +76,7 @@
                 </div>
             <?php endforeach; ?>
         </div>
-
-        <button type="button" class="create" data-id="<?php echo ($cod_prod); ?>" data-bs-toggle="modal" data-bs-target="#crearModal" id="openModal">
+        <button type="button" class="create" data-id="<?php echo ($cod_prod.'&id_venta='.$cod_venta); ?>" data-bs-toggle="modal" data-bs-target="#crearModal" id="openModal">
             <span class="material-icons" style="color: white;">add</span>Agregar Producto
         </button>
     </div>
