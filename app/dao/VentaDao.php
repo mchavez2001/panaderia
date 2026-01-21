@@ -1,9 +1,9 @@
 <?php
 require_once(__DIR__ . '/../../config/dbcn.php');
-require_once (__DIR__ . '/../../app/models/Venta.php');
-require_once (__DIR__ . '/../../app/models/Empleado.php');
-require_once (__DIR__ . '/../../app/models/Cuenta.php');
-require_once (__DIR__ . '/../../app/models/Pedido.php');
+require_once(__DIR__ . '/../../app/models/Venta.php');
+require_once(__DIR__ . '/../../app/models/Empleado.php');
+require_once(__DIR__ . '/../../app/models/Cuenta.php');
+require_once(__DIR__ . '/../../app/models/Pedido.php');
 
 class VentaDao
 {
@@ -17,7 +17,7 @@ class VentaDao
     public function getVentas()
     {
         $ventas = array();
-        $stmt = $this->conn->prepare("SELECT * FROM venta WHERE estado = '1' ORDER BY fecha DESC, cod_venta DESC LIMIT 50");
+        $stmt = $this->conn->prepare("SELECT * FROM venta WHERE estado = '1' AND tipo = '1' ORDER BY fecha DESC, cod_venta DESC LIMIT 50");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
@@ -39,7 +39,7 @@ class VentaDao
     public function getVentasbyFecha($fecha)
     {
         $ventas = array();
-        $stmt = $this->conn->prepare("SELECT * FROM venta WHERE estado = '1' AND fecha = ? ORDER BY fecha DESC, cod_venta DESC");
+        $stmt = $this->conn->prepare("SELECT * FROM venta WHERE estado = '1' AND tipo = '1' AND fecha = ? ORDER BY fecha DESC, cod_venta DESC");
         $stmt->bind_param("s", $fecha);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -196,7 +196,7 @@ class VentaDao
         $venta = $this->getVenta($cod_venta);
         $cuenta = $this->getCuenta($venta->getCod_cuenta());
         $nuevo_saldo = $cuenta->getSaldo() - $venta->getImporte();
-        
+
         $sql = "UPDATE cuenta SET saldo = ? WHERE cod_cuenta = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("di", $nuevo_saldo, $cuenta->getCod_cuenta());
@@ -210,7 +210,7 @@ class VentaDao
         while ($row = $result->fetch_assoc()) {
             $id_productos[] = $row['cod_prod'];
         }
-        
+
         $sql = "DELETE FROM ventaproducto WHERE cod_venta = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $cod_venta);
@@ -535,7 +535,7 @@ class VentaDao
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $cod_venta);
         $stmt->execute();
-        
+
         $venta = $this->getVenta($cod_venta);
         $cod_cuenta = $venta->getCod_cuenta();
         $cuenta = $this->getCuenta($cod_cuenta);
@@ -618,7 +618,7 @@ class VentaDao
         while ($row = $result->fetch_assoc()) {
             $id_productos[] = $row['cod_prod'];
         }
-        
+
         $sql = "DELETE FROM ventaproducto WHERE cod_venta = ?";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $cod_venta);
@@ -674,5 +674,67 @@ class VentaDao
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("i", $cod_cuenta);
         $stmt->execute();
+    }
+
+    public function getVentasAbarrotes()
+    {
+        $ventas = array();
+        $stmt = $this->conn->prepare("SELECT * FROM venta WHERE estado = '1' AND tipo = '2' ORDER BY fecha DESC, cod_venta DESC LIMIT 50");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $venta = new Venta(
+                $row['cod_cuenta'],
+                $row['cod_empleado'],
+                $row['fecha'],
+                $row['importe'],
+                $row['mont_pasaj'],
+                $row['met_pag'],
+                $row['estado']
+            );
+            $venta->setCod_venta($row['cod_venta']);
+            $ventas[] = $venta;
+        }
+        return $ventas;
+    }
+
+    public function getVentasbyFechaAbarrotes($fecha)
+    {
+        $ventas = array();
+        $stmt = $this->conn->prepare("SELECT * FROM venta WHERE estado = '1' AND fecha = ? AND tipo = '2' ORDER BY fecha DESC, cod_venta DESC");
+        $stmt->bind_param("s", $fecha);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $venta = new Venta(
+                $row['cod_cuenta'],
+                $row['cod_empleado'],
+                $row['fecha'],
+                $row['importe'],
+                $row['mont_pasaj'],
+                $row['met_pag'],
+                $row['estado']
+            );
+            $venta->setCod_venta($row['cod_venta']);
+            $ventas[] = $venta;
+        }
+        return $ventas;
+    }
+    public function insertVentaAbarrote($venta)
+    {
+        $cod_cuenta = $venta->getCod_cuenta();
+        $cod_empleado = $venta->getCod_empleado();
+        $fecha = $venta->getFecha();
+        $importe = $venta->getImporte();
+        $mont_pasaj = $venta->getMont_pasaj();
+        $met_pag = $venta->getMet_pag();
+        $estado = $venta->getEstado();
+        $tipo = "2";
+
+        $sql = "INSERT INTO venta (cod_cuenta, cod_empleado, fecha, importe, mont_pasaj, met_pag, estado, tipo) values (?,?,?,?,?,?,?,?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("iisddsis", $cod_cuenta, $cod_empleado, $fecha, $importe, $mont_pasaj, $met_pag, $estado, $tipo);
+        $stmt->execute();
+        return $this->conn->insert_id;
     }
 }

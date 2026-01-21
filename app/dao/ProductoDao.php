@@ -223,6 +223,7 @@ class ProductoDao
         $stmt->execute();
         return $this->conn->insert_id;
     }
+
     public function updateEstado($cod_prod, $est)
     {
         $sql = "UPDATE producto SET est = ? WHERE cod_prod = ?";
@@ -464,6 +465,36 @@ class ProductoDao
         $sql = "INSERT INTO productodetalle (nom_producto, tamaño_producto, cantidad, cod_producto) values (?,?,?,?)";
         $stmt = $this->conn->prepare($sql);
         $stmt->bind_param("ssii", $nom_producto, $tamaño_producto, $cantidad, $cod_producto);
+        $stmt->execute();
+        return $this->conn->insert_id;
+    }
+    public function getAbarrotes()
+    {
+        $productos = array();
+        $stmt = $this->conn->prepare("SELECT * FROM producto WHERE tipo_prod = 'A'");
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $producto = new Producto(
+                $row['nom_prod'],
+                "",
+                "",
+                "",
+                ""
+            );
+            $producto->setCod_prod($row['cod_prod']);
+            $productos[] = $producto;
+        }
+        return $productos;
+    }
+
+    public function insertAbarrote($producto)
+    {
+        $nom_prod = $producto->getNom_prod();
+        $tipo_prod = "A";
+        $sql = "INSERT INTO producto (nom_prod, tipo_prod) values (?,?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ss", $nom_prod, $tipo_prod);
         $stmt->execute();
         return $this->conn->insert_id;
     }

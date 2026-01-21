@@ -112,5 +112,17 @@ class VentasController{
     public function actualizarCuentaNegativa($cod_cuenta){
         $this->ventasDao->updateCuentaNegativa($cod_cuenta);
     }
+
+    public function obtenerVentasAbarrotes(){
+        return $this->ventasDao->getVentasAbarrotes();
+    }
+
+    public function obtenerVentasbyFechaAbarrotes($fecha){
+        return $this->ventasDao->getVentasbyFechaAbarrotes($fecha);
+    }
+    
+    public function agregarVentaAbarrote($venta){
+        return $this->ventasDao->insertVentaAbarrote($venta);
+    }
 }
 ?>
