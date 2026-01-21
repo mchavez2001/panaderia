@@ -936,8 +936,8 @@ switch ($path) {
         break;
     case '/registro_ventas_abarrotes':
         $mensaje = '¿Estas seguro que deseas finalizar esta venta?';
-        $rutaDelete = 'eliminar_venta';
-        $rutaMsg = 'finalizar_venta';
+        $rutaDelete = 'eliminar_venta_abarrote';
+        $rutaMsg = 'finalizar_venta_abarrote';
         if (isset($_SESSION['user_id'])) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($_POST['action'] == 'search') {
@@ -1095,6 +1095,35 @@ switch ($path) {
             header("Location: /panaderia/public/login");
         }
         break;
+    case '/eliminar_venta_abarrote':
+        if (isset($_SESSION['user_id'])) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'eliminar') {
+                    $ventasController->eliminarVenta($_POST['id']);
+                    header("Location: /panaderia/public/registro_ventas_abarrotes");
+                    exit(); 
+                }
+            } else {
+                header("Location: /panaderia/public/login");
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/finalizar_venta_abarrote':
+        if (isset($_SESSION['user_id'])) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'confirmar') {
+                    #echo($_POST['id']);
+                    $ventasController->finalizarVenta($_POST['id']);
+                    header("Location: /panaderia/public/registro_ventas_abarrotes");
+                    exit();
+                }
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
     case '/producto_venta_abarrote':
         if (isset($_SESSION['user_id'])) {
             $rutaDelete = 'eliminar_producto_venta_abarrote';
@@ -1113,6 +1142,7 @@ switch ($path) {
         if (isset($_SESSION['user_id'])) {
             if (isset($query['id'])) {
                 $productos = $productoController->obtenerProductosbyFechaAct();
+                $abarrotes = $productoController->obtenerAbarrotes();
                 $cod_venta = $_GET['id'];
                 require_once '../app/views/createProductoVentaAbarroteView.php';
             } else {
@@ -1124,7 +1154,7 @@ switch ($path) {
                         $cod_prod = $productoController->agregarProductobyVenta($producto);
                         $detalle = isset($_POST['detalle']) ? 1 : 0;
                         $ventasController->unirVentaProducto($cod_prod, $_POST['cod'], $detalle);
-                        header("Location: /panaderia/public/producto_venta?id=" . $_POST['cod']);
+                        header("Location: /panaderia/public/producto_venta_abarrote?id=" . $_POST['cod']);
                         exit();
                     } else {
                         header("Location: /panaderia/public/listaVentasView");

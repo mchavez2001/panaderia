@@ -13,7 +13,7 @@
 
 <body>
     <?php require_once 'nav.php'; ?>
-    <a class="back" href="registro_ventas">Volver</a>
+    <a class="back" href="registro_ventas_abarrotes">Volver</a>
     <div class="cuerpo">
         <h2 class="titulo-general">VENTA <?php echo ($cod_venta); ?></h2>
         <p class="subtitulo-general">Lista de Abarrotes</p>
@@ -30,7 +30,6 @@
                         <th>Precio Total</th>
                         <th></th>
                         <th></th>
-                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -38,9 +37,8 @@
                         <tr class="elementos">
                             <td style="text-align: center;"><?php echo ($producto->getCod_prod()); ?></td>
                             <td><?php echo ($producto->getNom_prod()); ?></td>
-                            <td><?php echo ($producto->getDscr_prod()); ?></td>
-                            <td><?php echo ($producto->getTam_prod()); ?></td>
                             <td style="text-align: center;"><?php echo ($producto->getCant_prod()); ?></td>
+                            <td><?php echo ($producto->getTam_prod()); ?></td>
                             <td><?php echo ('S/' . $producto->getPrecio()); ?></td>
                             <td><?php echo ('S/' . $producto->getPrecio_Tot()); ?></td>
                             <?php if ($producto->getDetalle()) { ?>
@@ -75,7 +73,7 @@
                 <div class="card">
                     <h3 class="card-title">
                         <span class="material-icons" style="color: #0869fa;">inventory</span>
-                        <?php echo ($producto->getCant_prod() . ' ' . $producto->getNom_prod()) . ' ' . $producto->getTam_prod(); ?>
+                        <?php echo ($producto->getCant_prod() . ' ' . $producto->getTam_prod() . ' ' . $producto->getNom_prod()); ?>
                     </h3>
                     <hr />
                     <p>
@@ -87,21 +85,21 @@
                         Precio Total: S/<?php echo ($producto->getPrecio_Tot()); ?>
                     </p>
                     <div class="card-actions">
-                        <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($producto->getCod_prod()); ?>" onclick="event.stopPropagation();">
+                        <!-- <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php #echo ($producto->getCod_prod()); ?>" onclick="event.stopPropagation();">
                             <span class="material-icons">edit</span>
                         </button>
-                        <?php if ($producto->getDetalle()) { ?>
+                        <?php #if ($producto->getDetalle()) { ?>
                             <form action="/panaderia/public/producto_detalle" method="get">
-                                <input type="hidden" name="id" value="<?php echo ($producto->getCod_prod()); ?>">
-                                <input type="hidden" name="id_venta" value="<?php echo ($cod_venta); ?>">
+                                <input type="hidden" name="id" value="<?php #echo ($producto->getCod_prod()); ?>">
+                                <input type="hidden" name="id_venta" value="<?php #echo ($cod_venta); ?>">
                                 <button type="submit" class="productos" value="editar">
                                     <span class="material-icons" style="color: #0869fa;">inventory</span>
                                 </button>
                             </form>
-                        <?php } ?>
-                        <button type="button" class="btn-delete" data-id="<?php echo ($producto->getCod_prod()); ?>" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="event.stopPropagation();">
+                        <?php #} ?>
+                        <button type="button" class="btn-delete" data-id="<?php #echo ($producto->getCod_prod()); ?>" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="event.stopPropagation();">
                             <span class="material-icons" style="color: red;">delete</span>
-                        </button>
+                        </button> -->
                     </div>
                 </div>
             <?php endforeach; ?>
