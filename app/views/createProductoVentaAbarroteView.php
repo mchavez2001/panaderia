@@ -31,13 +31,13 @@
         <div class="user-form">
             <form action="/panaderia/public/agregar_producto_venta_abarrote" method="post">
                 <div class="input-wrapper">
-                    <label for="nombre">Nombre del Producto:</label>
+                    <label for="nombre">Nombre del Abarrote:</label>
                     <!-- <select name="nombre" id="nombre" class="select-field" onchange="actualizarTamanosYMaxBolsas()"> -->
                     <select name="nombre" id="nombre" class="select-field">
-                        <option value="">Selecciona un producto...</option>
-                        <option value="Pan">Pan</option>
-                        <option value="Bizcocho">Bizcocho</option>
-                        <option value="Mixto">Mixto</option>
+                        <option value="">Selecciona un abarrote...</option>
+                        <?php foreach ($abarrotes as $abarrote): ?>
+                            <option value="<?php echo $abarrote->getNom_prod(); ?>"><?php echo $abarrote->getNom_prod(); ?></option>
+                        <?php endforeach; ?>
                     </select>
                 </div>
 
