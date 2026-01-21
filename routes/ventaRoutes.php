@@ -353,7 +353,7 @@ switch ($path) {
                         $producto->setCod_prod($_POST['cod_prod']);
                         $cod_venta = $_POST['id_venta'];
                         $productoController->agregarProductobyDetalle($producto);
-                        header("Location: /panaderia/public/producto_detalle?id=" . $_POST['cod_prod']."&id_venta=" . $cod_venta);
+                        header("Location: /panaderia/public/producto_detalle?id=" . $_POST['cod_prod'] . "&id_venta=" . $cod_venta);
                         exit();
                     }
                 }
@@ -902,6 +902,278 @@ switch ($path) {
                         header("Location: /panaderia/public/listaVentasView");
                     }
                 }
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/lista_abarrotes':
+        $rutaDelete = 'eliminar_abarrote';
+        if (isset($_SESSION['user_id'])) {
+            $abarrotes = $productoController->obtenerAbarrotes();
+            require_once '../app/views/listaAbarrotesView.php';
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/agregar_abarrote':
+        if (isset($_SESSION['user_id'])) {
+            require_once '../app/views/createAbarroteView.php';
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'guardar') {
+                    $abarrote = new Producto($_POST['nom_abarrote'], "", 'N/A', "", "");
+                    $productoController->agregarAbarrote($abarrote);
+                    header("Location: /panaderia/public/lista_abarrotes");
+                    exit();
+                } else {
+                    header("Location: /panaderia/public/lista_abarrotes");
+                    exit();
+                }
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/registro_ventas_abarrotes':
+        $mensaje = '¿Estas seguro que deseas finalizar esta venta?';
+        $rutaDelete = 'eliminar_venta';
+        $rutaMsg = 'finalizar_venta';
+        if (isset($_SESSION['user_id'])) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'search') {
+                    $fecha = $_POST['date'];
+                    $vendedores = $ventasController->obtenerVendedores();
+                    $clientes = $clienteController->obtenerClientes();
+                    $ventas = $ventasController->obtenerVentasbyFechaAbarrotes($fecha);
+                    $cuentas = $ventasController->obtenerCuentas();
+                    #Asignacion de nombre de cliente
+                    foreach ($ventas as $venta) {
+                        foreach ($cuentas as $cuenta) {
+                            if ($venta->getCod_cuenta() == $cuenta->getCod_cuenta()) {
+                                foreach ($clientes as $cliente) {
+                                    if ($cliente->getId_cliente() == $cuenta->getCod_cliente()) {
+                                        $venta->setCod_cuenta($cliente->getNom_cliente() . ' ' . $cliente->getApell_cliente());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    #Asignacion de nombre de vendedor
+                    foreach ($ventas as $venta) {
+                        foreach ($vendedores as $vendedor) {
+                            if ($venta->getCod_empleado() == $vendedor->getId_empleado()) {
+                                $venta->setCod_empleado($vendedor->getNombre() . ' ' . $vendedor->getApellido());
+                            }
+                        }
+                    }
+                    #Obtener importes en base al total de productos comprados
+                    foreach ($ventas as $venta) {
+                        $importes_productos[$venta->getCod_venta()] = $ventasController->obtenerImporteProductos($venta->getCod_venta());
+                    }
+                    #Obtener importe deudas
+                    $importe_deudas = $ventasController->obtenerImporteDeudas();
+                    require_once '../app/views/listaVentasAbarrotesView.php';
+                    exit();
+                } else {
+                    $vendedores = $ventasController->obtenerVendedores();
+                    $clientes = $clienteController->obtenerClientes();
+                    $ventas = $ventasController->obtenerVentasAbarrotes();
+                    $cuentas = $ventasController->obtenerCuentas();
+                    #Asignacion de nombre de cliente
+                    foreach ($ventas as $venta) {
+                        foreach ($cuentas as $cuenta) {
+                            if ($venta->getCod_cuenta() == $cuenta->getCod_cuenta()) {
+                                foreach ($clientes as $cliente) {
+                                    if ($cliente->getId_cliente() == $cuenta->getCod_cliente()) {
+                                        $venta->setCod_cuenta($cliente->getNom_cliente() . ' ' . $cliente->getApell_cliente());
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    #Asignacion de nombre de vendedor
+                    foreach ($ventas as $venta) {
+                        foreach ($vendedores as $vendedor) {
+                            if ($venta->getCod_empleado() == $vendedor->getId_empleado()) {
+                                $venta->setCod_empleado($vendedor->getNombre() . ' ' . $vendedor->getApellido());
+                            }
+                        }
+                    }
+                    #Obtener importes en base al total de productos comprados
+                    foreach ($ventas as $venta) {
+                        $importes_productos[$venta->getCod_venta()] = $ventasController->obtenerImporteProductos($venta->getCod_venta());
+                    }
+                    #Obtener importe deudas
+                    $importe_deudas = $ventasController->obtenerImporteDeudas();
+                    require_once '../app/views/listaVentasAbarrotesView.php';
+                    exit();
+                }
+            }
+            $vendedores = $ventasController->obtenerVendedores();
+            $clientes = $clienteController->obtenerClientes();
+            $ventas = $ventasController->obtenerVentasAbarrotes();
+            $cuentas = $ventasController->obtenerCuentas();
+            #Asignacion de nombre de cliente
+            foreach ($ventas as $venta) {
+                foreach ($cuentas as $cuenta) {
+                    if ($venta->getCod_cuenta() == $cuenta->getCod_cuenta()) {
+                        foreach ($clientes as $cliente) {
+                            if ($cliente->getId_cliente() == $cuenta->getCod_cliente()) {
+                                $venta->setCod_cuenta($cliente->getNom_cliente() . ' ' . $cliente->getApell_cliente());
+                            }
+                        }
+                    }
+                }
+            }
+            #Asignacion de nombre de vendedor
+            foreach ($ventas as $venta) {
+                foreach ($vendedores as $vendedor) {
+                    if ($venta->getCod_empleado() == $vendedor->getId_empleado()) {
+                        $venta->setCod_empleado($vendedor->getNombre() . ' ' . $vendedor->getApellido());
+                    }
+                }
+            }
+            #Obtener importes en base al total de productos comprados
+            foreach ($ventas as $venta) {
+                $importes_productos[$venta->getCod_venta()] = $ventasController->obtenerImporteProductos($venta->getCod_venta());
+            }
+            #Obtener importe deudas
+            $importe_deudas = $ventasController->obtenerImporteDeudas();
+            require_once '../app/views/listaVentasAbarrotesView.php';
+            exit();
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/agregar_venta_abarrote':
+        if (isset($_SESSION['user_id'])) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'guardar') {
+                    if (isset($_POST['pasajeExist'])) {
+                        $cod_cuenta = $_POST['cod_cuenta'];
+                        $currentDate = date('Y-m-d');
+                        $venta = new Venta($cod_cuenta, $_POST['cod_empleado'], $currentDate, $_POST['pasaje'], $_POST['pasaje'], $_POST['met_pag'], 1);
+                        $ventasController->agregarVentaAbarrote($venta);
+                        header("Location: /panaderia/public/registro_ventas_abarrotes");
+                        exit();
+                    } else {
+                        $cod_cuenta = $_POST['cod_cuenta'];
+                        $currentDate = date('Y-m-d');
+                        $venta = new Venta($cod_cuenta, $_POST['cod_empleado'], $currentDate, 0, 'S/D', $_POST['met_pag'], 1);
+                        print_r($venta);
+                        $ventasController->agregarVentaAbarrote($venta);
+                        header("Location: /panaderia/public/registro_ventas_abarrotes");
+                        exit();
+                    }
+                }
+            }
+            $ventas = $ventasController->obtenerVentasAbarrotes();
+            $cuentas = $ventasController->obtenerCuentas();
+            $clientes = $clienteController->obtenerClientes();
+            #Asignacion de nombre de cliente
+            foreach ($ventas as $venta) {
+                foreach ($cuentas as $cuenta) {
+                    if ($venta->getCod_cuenta() == $cuenta->getCod_cuenta()) {
+                        foreach ($clientes as $cliente) {
+                            if ($cliente->getId_cliente() == $cuenta->getCod_cliente()) {
+                                $venta->setCod_cuenta($cliente->getNom_cliente() . ' ' . $cliente->getApell_cliente());
+                            }
+                        }
+                    }
+                }
+            }
+            foreach ($clientes as $cliente) {
+                foreach ($cuentas as $cuenta) {
+                    if ($cliente->getId_cliente() == $cuenta->getCod_cliente()) {
+                        $cliente->setId_cliente($cuenta->getCod_cuenta());
+                    }
+                }
+            }
+            $vendedores = $ventasController->obtenerVendedores();
+            require_once '../app/views/createVentaAbarroteView.php';
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/producto_venta_abarrote':
+        if (isset($_SESSION['user_id'])) {
+            $rutaDelete = 'eliminar_producto_venta_abarrote';
+            if (isset($query['id'])) {
+                $productos = $productoController->obtenerProductosbyVenta($query['id']);
+                $cod_venta = $_GET['id'];
+                require_once '../app/views/listaProductoVentaAbarroteView.php';
+            } else {
+                header("Location: /panaderia/public/login");
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/agregar_producto_venta_abarrote':
+        if (isset($_SESSION['user_id'])) {
+            if (isset($query['id'])) {
+                $productos = $productoController->obtenerProductosbyFechaAct();
+                $cod_venta = $_GET['id'];
+                require_once '../app/views/createProductoVentaAbarroteView.php';
+            } else {
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    if ($_POST['action'] == 'guardar') {
+                        $producto = new Producto($_POST['nombre'], $_POST['desc'], 'N/A', $_POST['uni_med'], $_POST['cant']);
+                        $producto->setPrecio($_POST['precio']);
+                        $producto->setPrecio_tot($_POST['precio'] * $_POST['cant']);
+                        $cod_prod = $productoController->agregarProductobyVenta($producto);
+                        $detalle = isset($_POST['detalle']) ? 1 : 0;
+                        $ventasController->unirVentaProducto($cod_prod, $_POST['cod'], $detalle);
+                        header("Location: /panaderia/public/producto_venta?id=" . $_POST['cod']);
+                        exit();
+                    } else {
+                        header("Location: /panaderia/public/listaVentasView");
+                    }
+                }
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/editar_producto_venta_abarrote':
+        if (isset($_SESSION['user_id'])) {
+            if (isset($query['id'])) {
+                $productos = $productoController->obtenerProductosbyFechaAct();
+                $cod_prod = $_GET['id'];
+                $cod_venta = $_SESSION['cod_ventaproducto'];
+                $productobyID = $productoController->obtenerProductosbyID($cod_prod);
+                #print_r($productobyID);
+                require_once '../app/views/editProductoVentaView.php';
+            } else {
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    if ($_POST['action'] == 'update') {
+                        $producto = new Producto($_POST['nombre'], $_POST['desc'], 'N/A', $_POST['tamano'], $_POST['cant']);
+                        $producto->setPrecio($_POST['precio']);
+                        $producto->setPrecio_tot($_POST['precio'] * $_POST['cant']);
+                        $producto->setCod_prod($_POST['cod_prod']);
+                        $productoController->editarProducto($producto);
+                        header("Location: /panaderia/public/producto_venta?id=" . $_POST['cod']);
+                        exit();
+                    }
+                }
+                header("Location: /panaderia/public/registro_ventas");
+                exit();
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/eliminar_producto_venta_abarrote':
+        if (isset($_SESSION['user_id'])) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'eliminar') {
+                    $cod_venta = $_SESSION['cod_ventaproducto'];
+                    $productoController->elminarProducto($_POST['id']);
+                    header("Location: /panaderia/public/producto_venta?id=" . $cod_venta);
+                    exit();
+                }
+            } else {
+                header("Location: /panaderia/public/login");
             }
         } else {
             header("Location: /panaderia/public/login");

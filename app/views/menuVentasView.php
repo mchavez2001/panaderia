@@ -36,6 +36,14 @@
             <span class="material-icons">track_changes</span>
             Seguimiento de Cuentas
         </a>
+        <a class="opcion" href="lista_abarrotes">
+            <span class="material-icons">edit_square</span>
+            Lista de Abarrotes
+        </a>
+        <a class="opcion" href="registro_ventas_abarrotes">
+            <span class="material-icons">point_of_sale</span>
+            Lista de Ventas de Abarrotes
+        </a>
         <!-- <a class="opcion" href="">
             <span class="material-icons">receipt_long</span>
             Generacion de Facturas/Recibos
