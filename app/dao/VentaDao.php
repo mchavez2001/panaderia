@@ -161,11 +161,11 @@ class VentaDao
         $mont_pasaj = $venta->getMont_pasaj();
         $met_pag = $venta->getMet_pag();
         $estado = $venta->getEstado();
+        $tipo = "1";
 
-
-        $sql = "INSERT INTO venta (cod_cuenta, cod_empleado, fecha, importe, mont_pasaj, met_pag, estado) values (?,?,?,?,?,?,?)";
+        $sql = "INSERT INTO venta (cod_cuenta, cod_empleado, fecha, importe, mont_pasaj, met_pag, estado, tipo) values (?,?,?,?,?,?,?,?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("iisddsi", $cod_cuenta, $cod_empleado, $fecha, $importe, $mont_pasaj, $met_pag, $estado);
+        $stmt->bind_param("iisddsis", $cod_cuenta, $cod_empleado, $fecha, $importe, $mont_pasaj, $met_pag, $estado, $tipo);
         $stmt->execute();
         return $this->conn->insert_id;
     }
