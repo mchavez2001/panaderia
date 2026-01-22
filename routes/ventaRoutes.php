@@ -934,6 +934,43 @@ switch ($path) {
             header("Location: /panaderia/public/login");
         }
         break;
+    /* case '/editar_abarrote':
+        if (isset($_SESSION['user_id'])) {
+            if (isset($query['id'])) {
+                $cliente = $clienteController->obtenerCliente($query['id']);
+                $cliente->setId_cliente($query['id']);
+                require_once '../app/views/editClienteView.php';
+            } else {
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    if ($_POST['action'] == 'update') {
+                        $cliente = new Cliente($_POST['dni'], $_POST['nom_cliente'], $_POST['apell_cliente'], $_POST['telef'], $_POST['direccion'], $_POST['sector']);
+                        $cliente->setId_cliente($_POST['cod_cliente']);
+                        print_r($cliente);
+                        $clienteController->editarCliente($cliente);
+                    }
+                }
+                header("Location: /panaderia/public/lista_clientes");
+                exit();
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break; */
+    case '/eliminar_abarrote':
+        if (isset($_SESSION['user_id'])) {
+            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                if ($_POST['action'] == 'eliminar') {
+                    $productoController->eliminarAbarrote($_POST['id']);
+                    header("Location: /panaderia/public/lista_abarrotes");
+                    exit();
+                }
+            } else {
+                header("Location: /panaderia/public/login");
+            }
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
     case '/registro_ventas_abarrotes':
         $mensaje = '¿Estas seguro que deseas finalizar esta venta?';
         $rutaDelete = 'eliminar_venta_abarrote';

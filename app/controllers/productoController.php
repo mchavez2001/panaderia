@@ -139,4 +139,7 @@ class ProductoController
     {
         return $this->productoDao->insertAbarrote($abarrote);
     }
+    public function eliminarAbarrote($id){
+        return $this->productoDao->deleteAbarrote($id);
+    }
 }

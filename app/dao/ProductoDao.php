@@ -498,4 +498,12 @@ class ProductoDao
         $stmt->execute();
         return $this->conn->insert_id;
     }
+
+    public function deleteAbarrote($cod_prod)
+    {
+        $sql = "DELETE FROM producto WHERE cod_prod = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("i", $cod_prod);
+        $stmt->execute();
+    }
 }

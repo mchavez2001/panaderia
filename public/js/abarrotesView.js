@@ -5,7 +5,7 @@ $(document).ready(function () {
     });
     $('.edit').on('click', function () {
         var userId = $(this).data('id'); // Obtiene el ID del usuario
-        $('#formContent').load('/panaderia/public/editar_cliente?id=' + userId);
+        $('#formContent').load('/panaderia/public/editar_abarrote?id=' + userId);
     });
     $('.btn-delete').on('click', function () {
         var userId = $(this).data('id');
