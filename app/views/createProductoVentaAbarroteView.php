@@ -47,19 +47,22 @@
 
                 <div class="input-wrapper">
                     <label for="cant">Cantidad a vender:</label>
-                    <input type="number" min="0" id="cant" name="cant" class="input-field">
+                    <input type="number" step="0.01" min="0" value="0" id="cant" name="cant" class="input-field">
                 </div>
 
                 <div class="input-wrapper">
                     <label for="uni_med">Medida:</label>
                     <select name="uni_med" id="uni_med" class="select-field">
                         <option value="KG">KG</option>
+                        <option value="UND">UND</option>
+                        <option value="UND x6">UND x6</option>
+                        <option value="DOC">DOC</option>
                     </select>
                 </div>
 
                 <div class="input-wrapper">
                     <label for="uni_med">Precio:</label>
-                    <input type="text" id="precio" name="precio" class="input-field">
+                    <input type="number" step="0.01" min="0" value="0" id="precio" name="precio" class="input-field">
                 </div>
 
                 <input type="hidden" id="cod" name="cod" value="<?php echo ($cod_venta); ?>">
