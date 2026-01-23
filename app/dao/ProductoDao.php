@@ -215,11 +215,12 @@ class ProductoDao
         $tam_prod = $producto->getTam_prod();
         $cant_prod = $producto->getCant_prod();
         $precio = $producto->getPrecio();
-        $precio_tot = intval($precio) * intval($cant_prod);
+        #$precio_tot = intval($precio) * intval($cant_prod);
+        $precio_tot = $producto->getPrecio_tot();
         #echo($nom_prod. ' '.$dscr_prod. ' '.$tam_prod. ' '.$cant_prod. ' '.$precio. ' '.$precio_tot);
         $sql = "INSERT INTO producto (nom_prod, dscr_prod, tam_prod, cant_prod, precio, precio_tot) values (?,?,?,?,?,?)";
         $stmt = $this->conn->prepare($sql);
-        $stmt->bind_param("sssidd", $nom_prod, $dscr_prod, $tam_prod, $cant_prod, $precio, $precio_tot);
+        $stmt->bind_param("sssddd", $nom_prod, $dscr_prod, $tam_prod, $cant_prod, $precio, $precio_tot);
         $stmt->execute();
         return $this->conn->insert_id;
     }
