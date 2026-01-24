@@ -83,10 +83,18 @@
                                 <?php
                                 $name = '';
                                 for ($i = 0; $i < count($productos[$venta->getCod_venta()]); $i++) {
-                                    if ($i == 0) {
-                                        $name = $productos[$venta->getCod_venta()][$i]->getCant_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod();
-                                    } else {
-                                        $name = $name . ', ' . $productos[$venta->getCod_venta()][$i]->getCant_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod();
+                                    if ($productos[$venta->getCod_venta()][$i]->getNom_prod() == 'Pan' || $productos[$venta->getCod_venta()][$i]->getNom_prod() == 'Bizcocho') {
+                                        if ($i == 0) {
+                                            $name = intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod();
+                                        } else {
+                                            $name = $name . ', ' . intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod();
+                                        }
+                                    }else{
+                                        if ($i == 0) {
+                                            $name = intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod();
+                                        } else {
+                                            $name = $name . ', ' . intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod();
+                                        }
                                     }
                                 }
                                 echo $name;
