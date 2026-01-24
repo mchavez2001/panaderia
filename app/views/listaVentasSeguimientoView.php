@@ -53,7 +53,13 @@
 </head>
 
 <body>
-    <?php require_once 'nav.php'; ?>
+    <?php require_once 'nav.php';
+    function formatCantidad($cantidad)
+    {
+        return rtrim(rtrim(number_format((float)$cantidad, 2, '.', ''), '0'), '.');
+    }
+
+    ?>
     <a class="back" href="seguimiento_cuentas">Volver</a>
     <div class="cuerpo">
         <h2 class="titulo-general" style="font-size: 1.5rem;"><?php echo $cliente->getNom_cliente() . ' ' . $cliente->getApell_cliente() ?></h2>
@@ -89,11 +95,14 @@
                                         } else {
                                             $name = $name . ', ' . intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod();
                                         }
-                                    }else{
+                                    } else {
+                                        $cant = formatCantidad(
+                                            $productos[$venta->getCod_venta()][$i]->getCant_prod()
+                                        );
                                         if ($i == 0) {
-                                            $name = intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod();
+                                            $name = $cant . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod();
                                         } else {
-                                            $name = $name . ', ' . intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod();
+                                            $name .= ', ' . $cant . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod();
                                         }
                                     }
                                 }
@@ -149,20 +158,23 @@
                         <?php
                         $name = '';
                         for ($i = 0; $i < count($productos[$venta->getCod_venta()]); $i++) {
-                                    if ($productos[$venta->getCod_venta()][$i]->getNom_prod() == 'Pan' || $productos[$venta->getCod_venta()][$i]->getNom_prod() == 'Bizcocho') {
-                                        if ($i == 0) {
-                                            $name = intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod();
-                                        } else {
-                                            $name = $name . ', ' . intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod();
-                                        }
-                                    }else{
-                                        if ($i == 0) {
-                                            $name = intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod();
-                                        } else {
-                                            $name = $name . ', ' . intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod();
-                                        }
-                                    }
+                            if ($productos[$venta->getCod_venta()][$i]->getNom_prod() == 'Pan' || $productos[$venta->getCod_venta()][$i]->getNom_prod() == 'Bizcocho') {
+                                if ($i == 0) {
+                                    $name = intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod();
+                                } else {
+                                    $name = $name . ', ' . intval($productos[$venta->getCod_venta()][$i]->getCant_prod()) . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod();
                                 }
+                            } else {
+                                $cant = formatCantidad(
+                                    $productos[$venta->getCod_venta()][$i]->getCant_prod()
+                                );
+                                if ($i == 0) {
+                                    $name = $cant . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod();
+                                } else {
+                                    $name .= ', ' . $cant . ' ' . $productos[$venta->getCod_venta()][$i]->getTam_prod() . ' ' . $productos[$venta->getCod_venta()][$i]->getNom_prod();
+                                }
+                            }
+                        }
                         echo $name;
                         ?>
                         <p class="card-date" style="padding-top: 5px; margin-bottom: 0;">
