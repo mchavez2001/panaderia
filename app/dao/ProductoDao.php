@@ -216,7 +216,7 @@ class ProductoDao
         $cant_prod = $producto->getCant_prod();
         $precio = $producto->getPrecio();
         #$precio_tot = intval($precio) * intval($cant_prod);
-        $precio_tot = $producto->getPrecio_tot();
+        $precio_tot = round($producto->getPrecio_tot(), 1);
         #echo($nom_prod. ' '.$dscr_prod. ' '.$tam_prod. ' '.$cant_prod. ' '.$precio. ' '.$precio_tot);
         $sql = "INSERT INTO producto (nom_prod, dscr_prod, tam_prod, cant_prod, precio, precio_tot) values (?,?,?,?,?,?)";
         $stmt = $this->conn->prepare($sql);
