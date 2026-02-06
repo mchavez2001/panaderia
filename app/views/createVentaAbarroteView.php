@@ -29,6 +29,7 @@
                     <select class="select-field" name="met_pag" id="met_pag">
                         <option value="Credito">Credito</option>
                         <option value="YAPE">YAPE</option>
+                        <option value="PLIN">PLIN</option>
                         <option value="Efectivo">Efectivo</option>
                         <option value="Transferencia">Transferencia</option>
                     </select><br><br>
