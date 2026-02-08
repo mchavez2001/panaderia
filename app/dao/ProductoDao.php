@@ -489,6 +489,25 @@ class ProductoDao
         return $productos;
     }
 
+    public function getAbarroteByID($cod_prod)
+    {
+        $stmt = $this->conn->prepare("SELECT * FROM producto WHERE cod_prod = ? AND tipo_prod = 'A'");
+        $stmt->bind_param("i", $cod_prod);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $producto = new Producto(
+                $row['nom_prod'],
+                "",
+                "",
+                "",
+                ""
+            );
+            $producto->setCod_prod($row['cod_prod']);
+        }
+        return $producto;
+    }
+
     public function insertAbarrote($producto)
     {
         $nom_prod = $producto->getNom_prod();
@@ -498,6 +517,17 @@ class ProductoDao
         $stmt->bind_param("ss", $nom_prod, $tipo_prod);
         $stmt->execute();
         return $this->conn->insert_id;
+    }
+
+    public function updateAbarrote($producto)
+    {
+        $cod_prod = $producto->getCod_prod();
+        $nom_prod = $producto->getNom_prod();
+
+        $sql = "UPDATE producto SET nom_prod = ? WHERE cod_prod = ?";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("si", $nom_prod, $cod_prod);
+        $stmt->execute();
     }
 
     public function deleteAbarrote($cod_prod)
