@@ -99,9 +99,9 @@
                         <!-- <button type="button" class="detail" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php #echo ($cliente->getId_cliente()); ?>">
                             <span class="material-icons" style="color: #0869fa;">visibility</span>
                         </button> -->
-                        <!-- <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($abarrote->getCod_prod()); ?>" onclick="event.stopPropagation();">
+                        <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($abarrote->getCod_prod()); ?>" onclick="event.stopPropagation();">
                             <span class="material-icons">edit</span>
-                        </button> -->
+                        </button>
                         <button type="button" class="btn-delete" data-id="<?php echo ($abarrote->getCod_prod()); ?>" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="event.stopPropagation();">
                             <span class="material-icons" style="color: red;">delete</span>
                         </button>

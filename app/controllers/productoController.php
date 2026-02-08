@@ -135,11 +135,19 @@ class ProductoController
     {
         return $this->productoDao->getAbarrotes();
     }
+    public function obtenerAbarroteByID($cod_prod)
+    {
+        return $this->productoDao->getAbarroteByID($cod_prod);
+    }
     public function agregarAbarrote($abarrote)
     {
         return $this->productoDao->insertAbarrote($abarrote);
     }
+    public function editarAbarrote($abarrote)
+    {
+        return $this->productoDao->updateProducto($abarrote);
+    }
     public function eliminarAbarrote($id){
-        return $this->productoDao->deleteAbarrote($id);
+        return $this->productoDao->deleteProducto($id);
     }
 }

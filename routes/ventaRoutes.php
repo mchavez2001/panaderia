@@ -244,6 +244,7 @@ switch ($path) {
         break;
     case '/producto_venta':
         if (isset($_SESSION['user_id'])) {
+            $_SESSION['cod_ventaproducto'] = $_GET['id'];
             $rutaDelete = 'eliminar_producto_venta';
             if (isset($query['id'])) {
                 $productos = $productoController->obtenerProductosbyVenta($query['id']);
@@ -289,7 +290,6 @@ switch ($path) {
                 $cod_prod = $_GET['id'];
                 $cod_venta = $_SESSION['cod_ventaproducto'];
                 $productobyID = $productoController->obtenerProductosbyID($cod_prod);
-                #print_r($productobyID);
                 require_once '../app/views/editProductoVentaView.php';
             } else {
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -934,28 +934,27 @@ switch ($path) {
             header("Location: /panaderia/public/login");
         }
         break;
-    /* case '/editar_abarrote':
+    case '/editar_abarrote':
         if (isset($_SESSION['user_id'])) {
             if (isset($query['id'])) {
-                $cliente = $clienteController->obtenerCliente($query['id']);
-                $cliente->setId_cliente($query['id']);
-                require_once '../app/views/editClienteView.php';
+                $abarrote = $productoController->obtenerAbarroteByID($query['id']);
+                $abarrote->setCod_prod($query['id']);
+                require_once '../app/views/editAbarroteView.php';
             } else {
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if ($_POST['action'] == 'update') {
-                        $cliente = new Cliente($_POST['dni'], $_POST['nom_cliente'], $_POST['apell_cliente'], $_POST['telef'], $_POST['direccion'], $_POST['sector']);
-                        $cliente->setId_cliente($_POST['cod_cliente']);
-                        print_r($cliente);
-                        $clienteController->editarCliente($cliente);
+                        $abarrote = new Producto($_POST['nom_abarrote'], "", 'N/A', "", "");
+                        $abarrote->setCod_prod($_POST['cod_abarrote']);
+                        $productoController->editarAbarrote($abarrote);
                     }
                 }
-                header("Location: /panaderia/public/lista_clientes");
+                header("Location: /panaderia/public/lista_abarrotes");
                 exit();
             }
         } else {
             header("Location: /panaderia/public/login");
         }
-        break; */
+        break;
     case '/eliminar_abarrote':
         if (isset($_SESSION['user_id'])) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -1163,6 +1162,7 @@ switch ($path) {
         break;
     case '/producto_venta_abarrote':
         if (isset($_SESSION['user_id'])) {
+            $_SESSION['cod_ventaproducto'] = $_GET['id'];
             $rutaDelete = 'eliminar_producto_venta_abarrote';
             if (isset($query['id'])) {
                 $productos = $productoController->obtenerProductosbyVenta($query['id']);
@@ -1205,25 +1205,25 @@ switch ($path) {
     case '/editar_producto_venta_abarrote':
         if (isset($_SESSION['user_id'])) {
             if (isset($query['id'])) {
-                $productos = $productoController->obtenerProductosbyFechaAct();
                 $cod_prod = $_GET['id'];
                 $cod_venta = $_SESSION['cod_ventaproducto'];
+                $abarrotes = $productoController->obtenerAbarrotes();
                 $productobyID = $productoController->obtenerProductosbyID($cod_prod);
-                #print_r($productobyID);
-                require_once '../app/views/editProductoVentaView.php';
+                print_r($productobyID);
+                require_once '../app/views/editProductoVentaAbarroteView.php';
             } else {
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if ($_POST['action'] == 'update') {
-                        $producto = new Producto($_POST['nombre'], $_POST['desc'], 'N/A', $_POST['tamano'], $_POST['cant']);
+                        $producto = new Producto($_POST['nombre'], $_POST['desc'], 'N/A', $_POST['uni_med'], $_POST['cant']);
                         $producto->setPrecio($_POST['precio']);
                         $producto->setPrecio_tot($_POST['precio'] * $_POST['cant']);
                         $producto->setCod_prod($_POST['cod_prod']);
                         $productoController->editarProducto($producto);
-                        header("Location: /panaderia/public/producto_venta?id=" . $_POST['cod']);
+                        header("Location: /panaderia/public/producto_venta_abarrote?id=" . $_SESSION['cod_ventaproducto']);
                         exit();
                     }
                 }
-                header("Location: /panaderia/public/registro_ventas");
+                header("Location: /panaderia/public/producto_venta_abarrote?id=" . $_SESSION['cod_ventaproducto']);
                 exit();
             }
         } else {
@@ -1234,9 +1234,8 @@ switch ($path) {
         if (isset($_SESSION['user_id'])) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($_POST['action'] == 'eliminar') {
-                    $cod_venta = $_SESSION['cod_ventaproducto'];
                     $productoController->elminarProducto($_POST['id']);
-                    header("Location: /panaderia/public/producto_venta?id=" . $cod_venta);
+                    header("Location: /panaderia/public/producto_venta_abarrote?id=" . $_SESSION['cod_ventaproducto']);
                     exit();
                 }
             } else {

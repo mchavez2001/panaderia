@@ -85,21 +85,21 @@
                         Precio Total: S/<?php echo ($producto->getPrecio_Tot()); ?>
                     </p>
                     <div class="card-actions">
-                        <!-- <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php #echo ($producto->getCod_prod()); ?>" onclick="event.stopPropagation();">
+                        <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($producto->getCod_prod()); ?>" onclick="event.stopPropagation();">
                             <span class="material-icons">edit</span>
                         </button>
                         <?php #if ($producto->getDetalle()) { ?>
-                            <form action="/panaderia/public/producto_detalle" method="get">
+                            <!-- <form action="/panaderia/public/producto_detalle" method="get">
                                 <input type="hidden" name="id" value="<?php #echo ($producto->getCod_prod()); ?>">
                                 <input type="hidden" name="id_venta" value="<?php #echo ($cod_venta); ?>">
                                 <button type="submit" class="productos" value="editar">
                                     <span class="material-icons" style="color: #0869fa;">inventory</span>
                                 </button>
-                            </form>
+                            </form> -->
                         <?php #} ?>
-                        <button type="button" class="btn-delete" data-id="<?php #echo ($producto->getCod_prod()); ?>" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="event.stopPropagation();">
+                        <button type="button" class="btn-delete" data-id="<?php echo ($producto->getCod_prod()); ?>" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="event.stopPropagation();">
                             <span class="material-icons" style="color: red;">delete</span>
-                        </button> -->
+                        </button>
                     </div>
                 </div>
             <?php endforeach; ?>
