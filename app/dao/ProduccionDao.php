@@ -674,7 +674,7 @@ class ProduccionDao
     public function getInsumosConsumidosinProduccion()
     {
         $insumos = array();
-        $stmt = $this->conn->prepare("SELECT i.nom_ins AS insumo, DATE(p.fech_ini) AS fecha, SUM(i.stock)/1000 AS total_stock FROM produccion p INNER JOIN insumotoproduccion itp ON p.cod_procc = itp.cod_procc INNER JOIN insumo i ON itp.cod_ins = i.cod_ins WHERE p.fech_ini >= '2025-09-01' GROUP BY i.nom_ins, DATE(p.fech_ini) ORDER BY fecha DESC;");
+        $stmt = $this->conn->prepare("SELECT i.nom_ins AS insumo, DATE(p.fech_ini) AS fecha, SUM(i.stock)/1000 AS total_stock FROM produccion p INNER JOIN insumotoproduccion itp ON p.cod_procc = itp.cod_procc INNER JOIN insumo i ON itp.cod_ins = i.cod_ins WHERE p.fech_ini >= '2026-02-01' GROUP BY i.nom_ins, DATE(p.fech_ini) ORDER BY fecha DESC;");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
@@ -698,7 +698,7 @@ class ProduccionDao
     public function getCantProductosbyVentas()
     {
         $productos = array();
-        $stmt = $this->conn->prepare("SELECT v.fecha as fecha, p.nom_prod AS producto, p.tam_prod AS tamaño, sum(p.cant_prod) AS cantidad FROM venta v INNER JOIN ventaproducto vp ON v.cod_venta = vp.cod_venta INNER JOIN producto p ON vp.cod_prod = p.cod_prod WHERE fecha >= '2025-09-01' AND p.nom_prod != '' GROUP BY v.fecha, p.nom_prod, p.tam_prod ORDER BY v.fecha DESC;");
+        $stmt = $this->conn->prepare("SELECT v.fecha as fecha, p.nom_prod AS producto, p.tam_prod AS tamaño, sum(p.cant_prod) AS cantidad FROM venta v INNER JOIN ventaproducto vp ON v.cod_venta = vp.cod_venta INNER JOIN producto p ON vp.cod_prod = p.cod_prod WHERE fecha >= '2026-02-01' AND p.nom_prod != '' GROUP BY v.fecha, p.nom_prod, p.tam_prod ORDER BY v.fecha DESC;");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
@@ -716,7 +716,7 @@ class ProduccionDao
     public function getCantProductosbyProduccion()
     {
         $productos = array();
-        $stmt = $this->conn->prepare("SELECT pr.nom_prod as producto, pr.tam_prod as tamaño, p.cant_procc as cantidad, p.cant_extra as extra, DATE(p.fech_ini) as fecha from produccion p inner join productotoproducc ptop on p.cod_procc = ptop.cod_procc inner join producto pr on ptop.cod_prod = pr.cod_prod WHERE fech_ini >= '2025-09-01' order by p.fech_ini desc;");
+        $stmt = $this->conn->prepare("SELECT pr.nom_prod as producto, pr.tam_prod as tamaño, p.cant_procc as cantidad, p.cant_extra as extra, DATE(p.fech_ini) as fecha from produccion p inner join productotoproducc ptop on p.cod_procc = ptop.cod_procc inner join producto pr on ptop.cod_prod = pr.cod_prod WHERE fech_ini >= '2026-02-01' order by p.fech_ini desc;");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
