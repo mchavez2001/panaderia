@@ -183,7 +183,32 @@
                             $fechaAct = new DateTime();
                             $fechaVenta = new DateTime($venta->getFecha());
                             $fechaDiff = $fechaAct->diff($fechaVenta);
-                            if ($fechaDiff->days > 0 && $fechaDiff->days < 30) {
+                            if ($fechaDiff->days > 0 && $fechaDiff->days < 8) {
+                                echo ('Hace ' . $fechaDiff->days . ' días');
+                            } else if ($fechaDiff->days >= 8) {
+                                $meses = [
+                                    '01' => 'ene',
+                                    '02' => 'feb',
+                                    '03' => 'mar',
+                                    '04' => 'abr',
+                                    '05' => 'may',
+                                    '06' => 'jun',
+                                    '07' => 'jul',
+                                    '08' => 'ago',
+                                    '09' => 'sep',
+                                    '10' => 'oct',
+                                    '11' => 'nov',
+                                    '12' => 'dic'
+                                ];
+                                $dia = date('d', strtotime($venta->getFecha()));
+                                $mes = $meses[date('m', strtotime($venta->getFecha()))];
+                                $anio = date('Y', strtotime($venta->getFecha()));
+
+                                echo "$dia $mes $anio";
+                            } else if ($fechaDiff->days == 0) {
+                                echo ('Hoy');
+                            }
+                            /* if ($fechaDiff->days > 0 && $fechaDiff->days < 30) {
                                 echo ('Hace ' . $fechaDiff->days . ' días');
                             } else if ($fechaDiff->days >= 30 && $fechaDiff->days < 60) {
                                 echo ('Hace 1 mes');
@@ -191,15 +216,6 @@
                                 echo ('Hoy');
                             } else if ($fechaDiff->days >= 60) {
                                 echo $venta->getFecha();
-                            }
-                            /* if ($fechaDiff->days > 0 && $fechaDiff->days < 30) {
-                                echo ('Hace ' . $fechaDiff->days . ' días');
-                            } else if ($fechaDiff->days >= 30 && $fechaDiff->days < 60) {
-                                echo ('Hace 1 mes');
-                            } else if ($fechaDiff->days >= 60 && $fechaDiff->days < 90) {
-                                echo ('Hace 2 meses');
-                            } else if ($fechaDiff->days == 0) {
-                                echo ('Hoy');
                             } */
                             ?>
                         </p>
