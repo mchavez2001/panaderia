@@ -136,18 +136,18 @@ switch ($path) {
                 if ($_POST['action'] == 'guardar') {
                     if (isset($_POST['pasajeExist'])) {
                         $cod_cuenta = $_POST['cod_cuenta'];
-                        $currentDate = date('Y-m-d');
-                        $venta = new Venta($cod_cuenta, $_POST['cod_empleado'], $currentDate, $_POST['pasaje'], $_POST['pasaje'], $_POST['met_pag'], 1);
+                        #$currentDate = date('Y-m-d');
+                        $selectedDate = $_POST['fecha_venta'];
+                        $venta = new Venta($cod_cuenta, $_POST['cod_empleado'], $selectedDate, $_POST['pasaje'], $_POST['pasaje'], $_POST['met_pag'], 1);
                         $ventasController->agregarVenta($venta);
                         header("Location: /panaderia/public/registro_ventas");
                         exit();
                     } else {
                         $cod_cuenta = $_POST['cod_cuenta'];
-                        $currentDate = date('Y-m-d');
-                        $venta = new Venta($cod_cuenta, $_POST['cod_empleado'], $currentDate, 0, 'S/D', $_POST['met_pag'], 1);
-                        print_r($venta);
+                        #$currentDate = date('Y-m-d');
+                        $selectedDate = $_POST['fecha_venta'];
+                        $venta = new Venta($cod_cuenta, $_POST['cod_empleado'], $selectedDate, 0, 'S/D', $_POST['met_pag'], 1);
                         $ventasController->agregarVenta($venta);
-                        echo 'hola';
                         header("Location: /panaderia/public/registro_ventas");
                         exit();
                     }

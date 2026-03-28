@@ -34,6 +34,13 @@
                         <option value="Transferencia">Transferencia</option>
                     </select><br><br>
                     <div class="input-wrapper">
+                        <label for="pasajeExist">Fecha de Venta:
+                        </label>
+                    </div>
+                    <div class="input-wrapper">
+                        <input class="select-field" type="date" name="fecha_venta" id="fecha_venta">
+                    </div>
+                    <div class="input-wrapper">
                         <label for="pasajeExist">¿Tiene Pasaje?
                             <input class="check" type="checkbox" name="pasajeExist" id="pasajeExist">
                         </label>
