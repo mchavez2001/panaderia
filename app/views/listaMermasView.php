@@ -82,14 +82,14 @@
                         <span class="material-icons" style="color: #0869fa;">calendar_today</span>
                         Fecha: <?php echo ($merma->getFecha()); ?>
                     </p>
-                    <!-- <div class="card-actions">
+                    <div class="card-actions">
                         <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($merma->getCodMerma()); ?>">
                             <span class="material-icons">edit</span>
                         </button>
                         <button type="button" class="btn-delete" data-id="<?php echo ($merma->getCodMerma()); ?>" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" style="background: none; border: none; cursor: pointer;">
                             <span class="material-icons" style="color: red;">delete</span>
                         </button>
-                    </div> -->
+                    </div>
                 </div>
             <?php endforeach; ?>
         </div>

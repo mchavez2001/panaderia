@@ -442,7 +442,8 @@ switch ($path) {
             } else {
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if ($_POST['action'] == 'update') {
-                        $merma = new Merma($_POST['producto'], $_POST['tamaño'], $_POST['cantidad'], $_POST['fecha'], $_POST['motivo'], $_POST['estado']);
+                        $selectedDate = $_POST['fecha'];
+                        $merma = new Merma($_POST['producto'], $_POST['tamaño'], $_POST['cantidad'], $selectedDate, $_POST['motivo'], '0');
                         $merma->setCodMerma($_POST['cod_merma']);
                         $produccionController->editarMerma($merma);
                         header("Location: /panaderia/public/merma_produccion");
