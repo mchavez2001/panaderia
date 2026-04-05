@@ -24,6 +24,9 @@
                     <input placeholder="Ingresa la altura final" type="number" step="0.01" min="0" value="0" id="altura_final" name="altura_final" class="input-field">
                 </div>
                 <div class="input-wrapper">
+                    <input placeholder="Ingresa la fecha" type="date" id="fecha" name="fecha" class="input-field">
+                </div>
+                <div class="input-wrapper">
                     <button class="create-button" type="submit" name="action" value="add">AÑADIR</button>
                 </div>
             </form>

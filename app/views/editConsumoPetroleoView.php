@@ -21,7 +21,10 @@
                     <input placeholder="Ingresa la altura inicial" type="number" step="0.01" min="0" value="<?php echo ($consumo->getAltura_inicial()); ?>" id="altura_inicial" name="altura_inicial" class="input-field">
                 </div>
                 <div class="input-wrapper">
-                    <input placeholder="Ingresa la altura final" type="number" step="0.01" min="0" value="<?php echo ($consumo->getAltura_final());?>" id="altura_final" name="altura_final" class="input-field">
+                    <input placeholder="Ingresa la altura final" type="number" step="0.01" min="0" value="<?php echo ($consumo->getAltura_final()); ?>" id="altura_final" name="altura_final" class="input-field">
+                </div>
+                <div class="input-wrapper">
+                    <input placeholder="Ingresa la fecha" type="date" id="fecha" name="fecha" class="input-field" value="<?php echo ($consumo->getFecha()); ?>">
                 </div>
                 <div class="input-wrapper">
                     <button class="create-button" type="submit" name="action" value="edit">ACTUALIZAR</button>
