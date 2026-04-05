@@ -328,9 +328,9 @@ class ProductoDao
         return $entregas;
     }
     //ABONOS
-    public function insertAbonobyCuenta($cod_cuenta, $abono, $met_pago)
+    public function insertAbonobyCuenta($cod_cuenta, $abono, $met_pago, $fech_abon)
     {
-        $fech_abon = date("Y-m-d H:i:s");
+        #$fech_abon = date("Y-m-d H:i:s");
         $est_abon = '1';
         $sql = "INSERT INTO abono (cod_cuenta, din_abon, met_pag, fech_abon, est_abon) values (?,?,?,?,?)";
         $stmt = $this->conn->prepare($sql);
