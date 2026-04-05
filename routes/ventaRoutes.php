@@ -455,7 +455,7 @@ switch ($path) {
             } else {
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if ($_POST['action'] == 'add') {
-                        $productoController->agregarAbonobyCuenta($_POST['id'], $_POST['monto'], $_POST['met_pag']);
+                        $productoController->agregarAbonobyCuenta($_POST['id'], $_POST['monto'], $_POST['met_pag'], $_POST['fecha_abono']);
                         #Obteniendo cuenta y editando nuevo saldo para hacer el update
                         $cuenta = $ventasController->obtenerCuenta($_POST['id']);
                         $cuenta->setCod_cuenta($_POST['id']);

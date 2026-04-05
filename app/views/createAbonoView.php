@@ -26,7 +26,11 @@
                     <option value="PLIN">PLIN</option>
                     <option value="Efectivo">Efectivo</option>
                     <option value="Transferencia">Transferencia</option>
-                </select><br><br>
+                </select><br>
+                <label for="met_pag">Fecha de Pago:</label>
+                <div class="input-wrapper">
+                    <input placeholder="Fecha de Abono" type="datetime-local" id="fecha_abon" name="fecha_abono" class="input-field">
+                </div>
                 <div class="input-wrapper">
                     <button class="create-button" type="submit" name="action" value="add">AÑADIR</button>
                 </div>

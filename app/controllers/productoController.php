@@ -69,9 +69,9 @@ class ProductoController
         return $this->productoDao->getAbonobyID($cod_abon);
     }
 
-    public function agregarAbonobyCuenta($cod_cuenta, $abono, $met_pago)
+    public function agregarAbonobyCuenta($cod_cuenta, $abono, $met_pago, $fech_abon)
     {
-        $this->productoDao->insertAbonobyCuenta($cod_cuenta, $abono, $met_pago);
+        $this->productoDao->insertAbonobyCuenta($cod_cuenta, $abono, $met_pago, $fech_abon);
     }
 
     public function editarAbono($abono)
