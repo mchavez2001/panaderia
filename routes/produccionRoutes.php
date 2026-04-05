@@ -317,7 +317,8 @@ switch ($path) {
             require_once '../app/views/createConsumoPetroleoView.php';
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($_POST['action'] == 'add') {
-                    $currentDate = date('Y-m-d');
+                    #$currentDate = date('Y-m-d');
+                    $selectedDate = $_POST['fecha'];
                     #Seteando en 0 los valores iniciales
                     $altura_inicial = 0;
                     $altura_final = 0;
@@ -334,8 +335,7 @@ switch ($path) {
                         $altura_inicial = $_POST['altura_inicial'];
                         $altura_final = $_POST['altura_final'];
                     }
-                    $consumo = new Consumo_Petroleo($currentDate, $altura_inicial, $altura_final, $variante, $galones, $inversion);
-                    print_r($consumo);
+                    $consumo = new Consumo_Petroleo($selectedDate, $altura_inicial, $altura_final, $variante, $galones, $inversion);
                     $petroleoController->agregarConsumosPetroleo($consumo);
                     header("Location: /panaderia/public/consumo_petroleo");
                     exit();
@@ -352,13 +352,13 @@ switch ($path) {
             if (isset($query['id'])) {
                 $consumo = $petroleoController->obtenerConsumoPetroleo($query['id']);
                 $consumo->getCod_consumo_petroleo($_GET['id']);
-                #print_r($consumo);
                 require_once '../app/views/editConsumoPetroleoView.php';
             } else {
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if ($_POST['action'] == 'edit') {
                         $cod_consumo_petroleo = $_POST['id'];
-                        $currentDate = date('Y-m-d');
+                        #$currentDate = date('Y-m-d');
+                        $selectedDate = $_POST['fecha'];
                         #Seteando en 0 los valores iniciales
                         $altura_inicial = 0;
                         $altura_final = 0;
@@ -375,7 +375,7 @@ switch ($path) {
                             $altura_inicial = $_POST['altura_inicial'];
                             $altura_final = $_POST['altura_final'];
                         }
-                        $consumo = new Consumo_Petroleo($currentDate, $altura_inicial, $altura_final, $variante, $galones, $inversion);
+                        $consumo = new Consumo_Petroleo($selectedDate, $altura_inicial, $altura_final, $variante, $galones, $inversion);
                         $consumo->setCod_consumo_petroleo($cod_consumo_petroleo);
                         $petroleoController->editarConsumosPetroleo($consumo);
                         header("Location: /panaderia/public/consumo_petroleo");
