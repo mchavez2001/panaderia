@@ -14,7 +14,7 @@ class PetroleoDao
     public function getConsumosPetroleo()
     {
         $consumos = array();
-        $stmt = $this->conn->prepare("SELECT * FROM consumo_petroleo ORDER BY fecha DESC");
+        $stmt = $this->conn->prepare("SELECT * FROM consumo_petroleo ORDER BY fecha DESC, cod_consumo_petroleo DESC");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
