@@ -184,9 +184,20 @@ switch ($path) {
     case '/editar_venta':
         if (isset($_SESSION['user_id'])) {
             if (isset($query['id'])) {
+                $venta = $ventasController->obtenerVenta($query['id']);
+                $venta->setCod_venta($query['id']);
                 $cuentas = $ventasController->obtenerCuentas();
                 $clientes = $clienteController->obtenerClientes();
-                $ventas = $ventasController->obtenerVentas();
+                #Asignacion de nombre de cliente
+                foreach ($cuentas as $cuenta) {
+                    if ($venta->getCod_cuenta() == $cuenta->getCod_cuenta()) {
+                        foreach ($clientes as $cliente) {
+                            if ($cliente->getId_cliente() == $cuenta->getCod_cliente()) {
+                                $venta->setCod_cuenta($cliente->getNom_cliente() . ' ' . $cliente->getApell_cliente());
+                            }
+                        }
+                    }
+                }
                 foreach ($clientes as $cliente) {
                     foreach ($cuentas as $cuenta) {
                         if ($cliente->getId_cliente() == $cuenta->getCod_cliente()) {
@@ -194,34 +205,19 @@ switch ($path) {
                         }
                     }
                 }
-                $venta = $ventasController->obtenerVenta($query['id']);
-                $cuenta = $ventasController->obtenerCuenta($venta->getCod_cuenta());
-                $old_importe = $venta->getImporte();
-                $old_pasaje = $venta->getMont_pasaj();
-                $cliente = $clienteController->obtenerCliente($cuenta->getCod_cliente());
                 $vendedores = $ventasController->obtenerVendedores();
                 require_once '../app/views/editVentaView.php';
             } else {
                 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     if ($_POST['action'] == 'update') {
-                        if (isset($_POST['pasajeExist'])) {
-                            $importe_sin_pasaj = $_POST['old_importe'] - $_POST['old_pasaje'];
-                            $nuevoImporte = $importe_sin_pasaj + $_POST['pasaje'];
-                            $cod_cliente = $_POST['cod_cliente'];
-                            $venta = new Venta($cod_cliente, $_POST['cod_empleado'], 'S/D', $nuevoImporte, $_POST['pasaje'], $_POST['met_pag'], 0);
-                            $venta->setCod_venta($_POST['cod_venta']);
-                            $ventasController->editarVenta($venta);
-                        } else {
-                            $nuevoImporte = $_POST['old_importe'] - $_POST['old_pasaje'];
-                            $cod_cliente = $_POST['cod_cliente'];
-                            $venta = new Venta($cod_cliente, $_POST['cod_empleado'], 'S/D', $nuevoImporte, 'S/D', $_POST['met_pag'], 0);
-                            $venta->setCod_venta($_POST['cod_venta']);
-                            $ventasController->editarVenta($venta);
-                        }
+                        $importe = (float)$_POST['old_importe'] - (float)$_POST['old_pasaje'] + (float)$_POST['pasaje'];
+                        $venta = new Venta($_POST['cod_cuenta'], $_POST['cod_empleado'], $_POST['fecha_venta'], $importe, $_POST['pasaje'], $_POST['met_pag'], 1);
+                        $venta->setCod_venta($_POST['cod_venta']);
+                        $ventasController->editarVenta($venta);
+                        header("Location: /panaderia/public/registro_ventas");
+                        exit();
                     }
                 }
-                header("Location: /panaderia/public/registro_ventas");
-                exit();
             }
         } else {
             header("Location: /panaderia/public/login");
@@ -1138,7 +1134,7 @@ switch ($path) {
                 if ($_POST['action'] == 'eliminar') {
                     $ventasController->eliminarVenta($_POST['id']);
                     header("Location: /panaderia/public/registro_ventas_abarrotes");
-                    exit(); 
+                    exit();
                 }
             } else {
                 header("Location: /panaderia/public/login");

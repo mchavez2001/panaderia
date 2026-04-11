@@ -175,18 +175,19 @@ class VentaDao
         $cod_venta = $venta->getCod_venta();
         $cod_cuenta = $venta->getCod_cuenta();
         $cod_empleado = $venta->getCod_empleado();
+        $fecha = $venta->getFecha();
         $importe = $venta->getImporte();
         $mont_pasaj = $venta->getMont_pasaj();
         $met_pag = $venta->getMet_pag();
 
         if ($mont_pasaj == 'S/D') {
-            $sql = "UPDATE venta SET cod_cuenta = ?, cod_empleado = ?, met_pag = ?, importe = ? WHERE cod_venta = ?";
+            $sql = "UPDATE venta SET cod_cuenta = ?, cod_empleado = ?, fecha = ?, met_pag = ?, importe = ? WHERE cod_venta = ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("iisdi", $cod_cuenta, $cod_empleado, $met_pag, $importe, $cod_venta);
+            $stmt->bind_param("iissdi", $cod_cuenta, $cod_empleado, $fecha, $met_pag, $importe, $cod_venta);
         } else {
-            $sql = "UPDATE venta SET cod_cuenta = ?, cod_empleado = ?, met_pag = ?, importe = ?, mont_pasaj = ? WHERE cod_venta = ?";
+            $sql = "UPDATE venta SET cod_cuenta = ?, cod_empleado = ?, fecha = ?, met_pag = ?, importe = ?, mont_pasaj = ? WHERE cod_venta = ?";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("iisddi", $cod_cuenta, $cod_empleado, $met_pag, $importe, $mont_pasaj, $cod_venta);
+            $stmt->bind_param("iissddi", $cod_cuenta, $cod_empleado, $fecha, $met_pag, $importe, $mont_pasaj, $cod_venta);
         }
         $stmt->execute();
     }
