@@ -192,7 +192,7 @@
                          </div> -->
                          <div class="card-detail">
                              <span class="material-icons">monetization_on</span>
-                             <p><?php echo 'S/ ' . number_format($importes_productos[$venta->getCod_venta()], 2); ?></p>
+                             <p><?php echo 'S/ ' . number_format($importes_productos[$venta->getCod_venta()] + $venta->getMont_pasaj(), 2) ?></p>
                          </div>
                      </div>
                      <div class="card-actions">
@@ -208,10 +208,9 @@
                          <button type="button" class="confirm" data-bs-toggle="modal" data-bs-target="#confirmMsgModal" data-id="<?php echo ($venta->getCod_venta()); ?>" onclick="event.stopPropagation();">
                              <span class="material-icons" style="color: green;">check</span>
                          </button>
-                         <!-- <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php #echo ($venta->getCod_venta()); 
-                                                                                                                                ?>" onclick="event.stopPropagation();">
+                         <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($venta->getCod_venta());?>" onclick="event.stopPropagation();">
                              <span class="material-icons">edit</span>
-                         </button> -->
+                         </button>
                          <button type="button" class="btn-delete" data-id="<?php echo ($venta->getCod_venta()); ?>" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" onclick="event.stopPropagation();">
                              <span class="material-icons" style="color: red;">delete</span>
                          </button>
