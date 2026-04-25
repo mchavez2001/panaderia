@@ -14,9 +14,9 @@ class VentasController
         return $this->ventasDao->getVentas();
     }
 
-    public function obtenerVentasbyFecha($fecha)
+    public function obtenerVentasbyFecha($fechaInicio, $fechaFin)
     {
-        return $this->ventasDao->getVentasbyFecha($fecha);
+        return $this->ventasDao->getVentasbyFecha($fechaInicio, $fechaFin);
     }
 
     public function obtenerVentasbyCuenta($cod_cuenta)

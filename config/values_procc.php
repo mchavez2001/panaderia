@@ -1,6 +1,6 @@
 <?php
 
-#Valores en gr para 9KG de Pan
+#Valores en gr para 9KG de Pan = 1 coche
 $cantForPan['Harina'] = 9000;
 $cantForPan['Azucar'] = 850;
 $cantForPan['Sal'] = 90;
@@ -13,7 +13,7 @@ $cantForPan['Leche'] = 0;
 $cantForPan['Escencia'] = 0;
 $cantForPan['Anis'] = 0;
 
-#Valores en gr para 9KG de Bizcocho
+#Valores en gr para 9KG de Bizcocho = 1 coche
 $cantForBiz['Harina'] = 9000;
 $cantForBiz['Azucar'] = 2000;
 $cantForBiz['Sal'] = 60;

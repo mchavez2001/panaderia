@@ -36,11 +36,11 @@ class VentaDao
         return $ventas;
     }
 
-    public function getVentasbyFecha($fecha)
+    public function getVentasbyFecha($fechaInicio, $fechaFin)
     {
         $ventas = array();
-        $stmt = $this->conn->prepare("SELECT * FROM venta WHERE estado = '1' AND tipo = '1' AND fecha = ? ORDER BY fecha DESC, cod_venta DESC");
-        $stmt->bind_param("s", $fecha);
+        $stmt = $this->conn->prepare("SELECT * FROM venta WHERE estado = '1' AND tipo = '1' AND fecha BETWEEN ? AND ? ORDER BY fecha DESC, cod_venta DESC");
+        $stmt->bind_param("ss", $fechaInicio, $fechaFin);
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
