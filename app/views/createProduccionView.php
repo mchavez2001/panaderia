@@ -36,10 +36,10 @@
                     </select>
                 </div>
                 <div class="input-wrapper">
-                    <input placeholder="Latas a producir" type="number" step="any" id="latas" name="latas" min=0 class="input-field">
+                    <input placeholder="Latas a producir" type="number" step="any" id="latas" name="latas" min="0" value="0" class="input-field">
                 </div>
                 <div class="input-wrapper">
-                    <input placeholder="Unidades Extras" type="number" step="any" id="extra" name="extra" min=0 class="input-field">
+                    <input placeholder="Unidades Extras" type="number" step="any" id="extra" name="extra" min="0" value="0" class="input-field">
                 </div>
                 <!-- <div class="input-wrapper">
                     <label for="uni_med">Medida:</label>

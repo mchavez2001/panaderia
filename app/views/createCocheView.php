@@ -25,7 +25,7 @@
                     </select>
                 </div>
                 <div class="input-wrapper">
-                    <input placeholder="Cantidad de coches" type="number" step="any" id="coches" name="coches" min=0 class="input-field">
+                    <input type="number" step="any" id="coches" name="coches" min="0" value = "0" class="input-field">
                 </div>
                 <div class="input-wrapper">
                     <button class="create-button" type="submit" name="action" value="guardar">GUARDAR</button>

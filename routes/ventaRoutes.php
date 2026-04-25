@@ -26,10 +26,11 @@ switch ($path) {
         if (isset($_SESSION['user_id'])) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($_POST['action'] == 'search') {
-                    $fecha = $_POST['date'];
+                    $fechaInicio = $_POST['date_inicio'];
+                    $fechaFin = $_POST['date_fin'];
                     $vendedores = $ventasController->obtenerVendedores();
                     $clientes = $clienteController->obtenerClientes();
-                    $ventas = $ventasController->obtenerVentasbyFecha($fecha);
+                    $ventas = $ventasController->obtenerVentasbyFecha($fechaInicio, $fechaFin);
                     $cuentas = $ventasController->obtenerCuentas();
                     #Asignacion de nombre de cliente
                     foreach ($ventas as $venta) {
@@ -1124,6 +1125,48 @@ switch ($path) {
             }
             $vendedores = $ventasController->obtenerVendedores();
             require_once '../app/views/createVentaAbarroteView.php';
+        } else {
+            header("Location: /panaderia/public/login");
+        }
+        break;
+    case '/editar_venta_abarrote':
+        if (isset($_SESSION['user_id'])) {
+            if (isset($query['id'])) {
+                $venta = $ventasController->obtenerVenta($query['id']);
+                $venta->setCod_venta($query['id']);
+                $cuentas = $ventasController->obtenerCuentas();
+                $clientes = $clienteController->obtenerClientes();
+                #Asignacion de nombre de cliente
+                foreach ($cuentas as $cuenta) {
+                    if ($venta->getCod_cuenta() == $cuenta->getCod_cuenta()) {
+                        foreach ($clientes as $cliente) {
+                            if ($cliente->getId_cliente() == $cuenta->getCod_cliente()) {
+                                $venta->setCod_cuenta($cliente->getNom_cliente() . ' ' . $cliente->getApell_cliente());
+                            }
+                        }
+                    }
+                }
+                foreach ($clientes as $cliente) {
+                    foreach ($cuentas as $cuenta) {
+                        if ($cliente->getId_cliente() == $cuenta->getCod_cliente()) {
+                            $cliente->setId_cliente($cuenta->getCod_cuenta());
+                        }
+                    }
+                }
+                $vendedores = $ventasController->obtenerVendedores();
+                require_once '../app/views/editVentaAbarroteView.php';
+            } else {
+                if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    if ($_POST['action'] == 'update') {
+                        $importe = (float)$_POST['old_importe'] - (float)$_POST['old_pasaje'] + (float)$_POST['pasaje'];
+                        $venta = new Venta($_POST['cod_cuenta'], $_POST['cod_empleado'], $_POST['fecha_venta'], $importe, $_POST['pasaje'], $_POST['met_pag'], 1);
+                        $venta->setCod_venta($_POST['cod_venta']);
+                        $ventasController->editarVenta($venta);
+                        header("Location: /panaderia/public/registro_ventas_abarrotes");
+                        exit();
+                    }
+                }
+            }
         } else {
             header("Location: /panaderia/public/login");
         }

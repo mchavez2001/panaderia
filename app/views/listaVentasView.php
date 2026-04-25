@@ -49,7 +49,8 @@
          <div class="search-container">
              <input type="text" id="searchInput" placeholder="Buscar por nombre..." aria-label="Buscar ventas" />
              <form action="/panaderia/public/registro_ventas" method="post">
-                 <input type="date" id="searchDateInput" name="date" aria-label="Buscar por fecha" />
+                 <input type="date" id="searchDateInput" name="date_inicio" aria-label="Buscar por fecha" />
+                 <input type="date" id="searchDateInput" name="date_fin" aria-label="Buscar por fecha" />
                  <button type="submit" class="productos" name="action" value="search"><span class="material-icons" style="color: #0869fa;">search</span></button>
                  <button type="submit" class="productos" name="action" value="clean"><span class="material-icons" style="color: #0869fa;">cleaning_services</span></button>
              </form>
