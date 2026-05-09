@@ -170,7 +170,8 @@ class ProduccionDao
         return $merma;
     }
 
-    public function insertMerma($merma){
+    public function insertMerma($merma)
+    {
         #Iniciar Transaccion
         $this->conn->begin_transaction();
 
@@ -205,7 +206,8 @@ class ProduccionDao
         }
     }
 
-    public function editMerma($merma){
+    public function editMerma($merma)
+    {
         $cod_merma = $merma->getCodMerma();
         $producto = $merma->getProducto();
         $tamaño = $merma->getTamaño();
@@ -281,7 +283,7 @@ class ProduccionDao
     public function getProductosForProduction()
     {
         $productos = array();
-        $stmt = $this->conn->prepare("SELECT pr.unidades,pr.cod_procc, p.nom_prod, p.dscr_prod, pr.cant_extra, p.tam_prod, pr.cant_procc FROM productotoproducc prp INNER JOIN produccion pr ON prp.cod_procc = pr.cod_procc INNER JOIN producto p ON prp.cod_prod = p.cod_prod WHERE pr.est = '0'");
+        $stmt = $this->conn->prepare("SELECT pr.unidades,pr.cod_procc, p.nom_prod, p.dscr_prod, pr.cant_extra, p.tam_prod, pr.cant_procc FROM productotoproducc prp INNER JOIN produccion pr ON prp.cod_procc = pr.cod_procc INNER JOIN producto p ON prp.cod_prod = p.cod_prod WHERE pr.est = '0' ORDER BY nom_prod DESC, cant_procc ASC");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
@@ -364,6 +366,7 @@ class ProduccionDao
             $stmt->execute();
             # Confirmar la transacción
             $this->conn->commit();
+            return $cod_procc;
         } catch (Exception $e) {
             # Revertir la transacción en caso de error
             $this->conn->rollback();
@@ -450,6 +453,86 @@ class ProduccionDao
             throw $e;
         }
     }
+
+    public function insertarInsumosProduccionTotalPorTipo()
+    {
+        $productos = ['Pan', 'Bizcocho'];
+        #Iniciar Transaccion
+        for ($i = 0; $i < count($productos); $i++) {
+            if ($productos[$i] == 'Pan') {
+                $this->conn->begin_transaction();
+                try {
+                    $this->calculoInsumosTotales($productos[$i]);
+                    # Confirmar la transacción
+                    $this->conn->commit();
+                } catch (Exception $e) {
+                    # Revertir la transacción en caso de error
+                    $this->conn->rollback();
+                    throw $e;
+                }
+            } else if ($productos[$i] == 'Bizcocho') {
+                $this->conn->begin_transaction();
+                try {
+                    $this->calculoInsumosTotales($productos[$i]);
+                    # Confirmar la transacción     
+                    $this->conn->commit();
+                } catch (Exception $e) {
+                    # Revertir la transacción en caso de error
+                    $this->conn->rollback();
+                    throw $e;
+                }
+            }
+        }
+    }
+
+    public function calculoInsumosTotales($producto)
+    {
+        $insumos = array();
+        $stmt = $this->conn->prepare("SELECT pr.nom_prod,i.nom_ins, sum(i.stock) as total_stock FROM insumotoproduccion itop INNER JOIN produccion p ON itop.cod_procc = p.cod_procc INNER JOIN insumo i ON itop.cod_ins = i.cod_ins INNER JOIN productotoproducc prp ON prp.cod_procc = p.cod_procc INNER JOIN producto pr ON prp.cod_prod = pr.cod_prod WHERE p.est = '0' and pr.nom_prod = ? group by pr.nom_prod, i.nom_ins");
+        $stmt->bind_param("s", $producto);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        while ($row = $result->fetch_assoc()) {
+            $insumo = new Insumo(
+                $row['nom_ins'],
+                'S/D',
+                'S/D',
+                'S/D',
+                'S/D',
+                'S/D',
+                'S/D',
+                'S/D',
+                $row['total_stock'],
+                'S/D',
+                'S/D'
+            );
+            $insumos[] = $insumo;
+        }
+
+        $currentDate = date('Y-m-d');
+        $estado_inicial = 0;
+        $sql = "INSERT INTO produccion (fech_ini, est) values (?,?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("si", $currentDate, $estado_inicial);
+        $stmt->execute();
+        $cod_procc = $this->conn->insert_id;
+
+        $sql = "INSERT INTO producto (nom_prod) values (?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $producto);
+        $stmt->execute();
+        $cod_prod = $this->conn->insert_id;
+
+        $sql = "INSERT INTO productotoproducc (cod_procc, cod_prod) values (?,?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $cod_procc, $cod_prod);
+        $stmt->execute();
+
+        for ($i = 0; $i < count($insumos); $i++) {
+            $this->insertInsToProcc($cod_procc, $insumos[$i]);
+        }
+    }
+
     public function getInsumosForProduction()
     {
         $insumos = array();

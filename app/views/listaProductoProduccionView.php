@@ -33,6 +33,10 @@
                 </thead>
                 <tbody>
                     <?php foreach ($productos as $producto) : ?>
+                        <?php
+                        if ($producto->getCant_prod() <= 0 && $producto->getCant_extra() <= 0) {
+                            continue; // Salta a la siguiente iteración si ambos son menores o iguales a 0
+                        } ?>
                         <tr class="elementos">
                             <td><?php echo htmlspecialchars($producto->getCod_prod(), ENT_QUOTES, 'UTF-8'); ?></td>
                             <td><?php echo htmlspecialchars($producto->getNom_prod(), ENT_QUOTES, 'UTF-8'); ?></td>

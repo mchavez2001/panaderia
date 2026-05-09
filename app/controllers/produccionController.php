@@ -46,7 +46,7 @@ class ProduccionController
     {
         return $this->produccionDao->getMermaProduction();
     }
-    
+
     public function obtenerMerma($id)
     {
         return $this->produccionDao->findMermaByID($id);
@@ -83,9 +83,9 @@ class ProduccionController
     {
         return $this->produccionDao->insertProduccion($cod_coche, $produccion, $producto);
     }
-    public function eliminarProduccionByID($cod_coche,$id)
+    public function eliminarProduccionByID($cod_coche, $id)
     {
-        $this->produccionDao->deleteProduccion($cod_coche,$id);
+        $this->produccionDao->deleteProduccion($cod_coche, $id);
     }
     public function obtenerInsumosConsumidos()
     {
@@ -195,7 +195,14 @@ class ProduccionController
                     break;
             }
         }
+        #$this->produccionDao->insertarInsumosProduccionTotalPorTipo();
     }
+
+    public function calularInsumosProduccionTotalPorTipo()
+    {
+        return $this->produccionDao->insertarInsumosProduccionTotalPorTipo();
+    }
+    
     public function obtenerInsumosProduccion()
     {
         return $this->produccionDao->getInsumosForProduction();
@@ -291,73 +298,73 @@ class ProduccionController
         foreach ($insumoInventario as $insumo) {
             switch ($insumo->getNom_ins()) {
                 case 'Harina':
-                    $insumoHarina->setStock($insumo->getStock() - $insumoHarina->getStock()/1000);
+                    $insumoHarina->setStock($insumo->getStock() - $insumoHarina->getStock() / 1000);
                     $insumoHarina->setUni_med($insumo->getUni_med());
                     $insumoHarina->setDscr($insumo->getDscr());
                     $insumoHarina->setPrecio($insumo->getPrecio());
                     $insumoHarina->setPrecio_tot($insumo->getPrecio_tot());
                     break;
                 case 'Azucar':
-                    $insumoAzucar->setStock($insumo->getStock() - $insumoAzucar->getStock()/1000);
+                    $insumoAzucar->setStock($insumo->getStock() - $insumoAzucar->getStock() / 1000);
                     $insumoAzucar->setUni_med($insumo->getUni_med());
                     $insumoAzucar->setDscr($insumo->getDscr());
                     $insumoAzucar->setPrecio($insumo->getPrecio());
                     $insumoAzucar->setPrecio_tot($insumo->getPrecio_tot());
                     break;
                 case 'Sal':
-                    $insumoSal->setStock($insumo->getStock() - $insumoSal->getStock()/1000);
+                    $insumoSal->setStock($insumo->getStock() - $insumoSal->getStock() / 1000);
                     $insumoSal->setUni_med($insumo->getUni_med());
                     $insumoSal->setDscr($insumo->getDscr());
                     $insumoSal->setPrecio($insumo->getPrecio());
                     $insumoSal->setPrecio_tot($insumo->getPrecio_tot());
                     break;
                 case 'Mejorador':
-                    $insumoMejorador->setStock($insumo->getStock() - $insumoMejorador->getStock()/1000);
+                    $insumoMejorador->setStock($insumo->getStock() - $insumoMejorador->getStock() / 1000);
                     $insumoMejorador->setUni_med($insumo->getUni_med());
                     $insumoMejorador->setDscr($insumo->getDscr());
                     $insumoMejorador->setPrecio($insumo->getPrecio());
                     $insumoMejorador->setPrecio_tot($insumo->getPrecio_tot());
                     break;
                 case 'Levadura':
-                    $insumoLevadura->setStock($insumo->getStock() - $insumoLevadura->getStock()/1000);
+                    $insumoLevadura->setStock($insumo->getStock() - $insumoLevadura->getStock() / 1000);
                     $insumoLevadura->setUni_med($insumo->getUni_med());
                     $insumoLevadura->setDscr($insumo->getDscr());
                     $insumoLevadura->setPrecio($insumo->getPrecio());
                     $insumoLevadura->setPrecio_tot($insumo->getPrecio_tot());
                     break;
                 case 'Manteca':
-                    $insumoManteca->setStock($insumo->getStock() - $insumoManteca->getStock()/1000);
+                    $insumoManteca->setStock($insumo->getStock() - $insumoManteca->getStock() / 1000);
                     $insumoManteca->setUni_med($insumo->getUni_med());
                     $insumoManteca->setDscr($insumo->getDscr());
                     $insumoManteca->setPrecio($insumo->getPrecio());
                     $insumoManteca->setPrecio_tot($insumo->getPrecio_tot());
                     break;
                 case 'Manteca_Engrasar':
-                    $insumoManteca->setStock($insumo->getStock() - $insumoManteca->getStock()/1000);
+                    $insumoManteca->setStock($insumo->getStock() - $insumoManteca->getStock() / 1000);
                     break;
                 case 'Aceite':
-                    $insumoAceite->setStock($insumo->getStock() - $insumoAceite->getStock()/1000);
+                    $insumoAceite->setStock($insumo->getStock() - $insumoAceite->getStock() / 1000);
                     $insumoAceite->setUni_med($insumo->getUni_med());
                     $insumoAceite->setDscr($insumo->getDscr());
                     $insumoAceite->setPrecio($insumo->getPrecio());
                     $insumoAceite->setPrecio_tot($insumo->getPrecio_tot());
                     break;
                 case 'Leche':
-                    $insumoLeche->setStock($insumo->getStock() - $insumoLeche->getStock()/1000);
+                    $insumoLeche->setStock($insumo->getStock() - $insumoLeche->getStock() / 1000);
                     $insumoLeche->setUni_med($insumo->getUni_med());
                     $insumoLeche->setDscr($insumo->getDscr());
                     $insumoLeche->setPrecio($insumo->getPrecio());
                     $insumoLeche->setPrecio_tot($insumo->getPrecio_tot());
                     break;
                 case 'Escencia':
-                    $insumoEscencia->setStock($insumo->getStock() - $insumoEscencia->getStock()/1000);
+                    $insumoEscencia->setStock($insumo->getStock() - $insumoEscencia->getStock() / 1000);
                     $insumoEscencia->setUni_med($insumo->getUni_med());
                     $insumoEscencia->setDscr($insumo->getDscr());
                     $insumoEscencia->setPrecio($insumo->getPrecio());
                     $insumoEscencia->setPrecio_tot($insumo->getPrecio_tot());
                     break;
                 case 'Anis':
-                    $insumoAnis->setStock($insumo->getStock() - $insumoAnis->getStock()/1000);
+                    $insumoAnis->setStock($insumo->getStock() - $insumoAnis->getStock() / 1000);
                     $insumoAnis->setUni_med($insumo->getUni_med());
                     $insumoAnis->setDscr($insumo->getDscr());
                     $insumoAnis->setPrecio($insumo->getPrecio());

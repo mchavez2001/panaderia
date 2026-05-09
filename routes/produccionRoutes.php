@@ -224,6 +224,7 @@ switch ($path) {
             for ($i = 0; $i < count($producciones); $i++) {
                 $produccionController->calcularInsumosRequeridos($producciones[$i]);
             }
+            $produccionController->calularInsumosProduccionTotalPorTipo();
             header("Location: /panaderia/public/produccion");
             exit();
         } else {
