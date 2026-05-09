@@ -19,11 +19,13 @@
         <p class="subtitulo-general">Verifica y confirma los insumos calculados actualizar tu stock de insumos</p>
         <?php for ($i = 0; $i < count($producciones); $i++) : ?>
             <div class="produccion">
-                <h3>
+                <h3 style="text-align: center;">
                     <?php if (!empty($producciones[$i]->getCant_extra())) {
                         echo ('ID de Producción ' . $producciones[$i]->getCod_prod() . ': Cantidad de ' . $producciones[$i]->getNom_prod() . ' ' . $producciones[$i]->getTam_prod() . ' = ' . $producciones[$i]->getCant_prod() . ' Bolsas + ' . $producciones[$i]->getCant_extra() . ' Unidades');
-                    } else {
+                    } else if (empty($producciones[$i]->getCant_extra()) && !empty($producciones[$i]->getCant_prod())) {
                         echo ('ID de Producción ' . $producciones[$i]->getCod_prod() . ': Cantidad de ' . $producciones[$i]->getNom_prod() . ' ' . $producciones[$i]->getTam_prod() . ' = ' . $producciones[$i]->getCant_prod() . ' Bolsas');
+                    } else {
+                        echo "Consolidado de Insumos para " . $producciones[$i]->getNom_prod() . " ";
                     } ?>
                 </h3>
 
