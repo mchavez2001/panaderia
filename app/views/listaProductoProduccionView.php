@@ -54,6 +54,10 @@
 
         <div class="mobile-cards">
             <?php foreach ($productos as $producto) : ?>
+                <?php
+                if ($producto->getCant_prod() <= 0 && $producto->getCant_extra() <= 0) {
+                    continue; // Salta a la siguiente iteración si ambos son menores o iguales a 0
+                } ?>
                 <div class="card">
                     <h3 class="card-title">
                         <span class="material-icons" style="color: #0869fa;">inventory</span>
