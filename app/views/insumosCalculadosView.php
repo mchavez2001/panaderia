@@ -37,6 +37,7 @@
                                 <th>INSUMO</th>
                                 <th>STOCK</th>
                                 <th>MEDIDA</th>
+                                <th>PRECIO TOTAL</th>
                                 <th></th>
                                 <th></th>
                             </tr>
@@ -49,6 +50,7 @@
                                         <td><?php echo ($insumos[$j]->getNom_ins()) ?></td>
                                         <td><?php echo ($insumos[$j]->getStock()) ?></td>
                                         <td><?php echo ($insumos[$j]->getUni_med()) ?></td>
+                                        <td><?php echo ($insumos[$j]->getPrecio_tot()) ?></td>
                                         <td style="text-align: center;">
                                             <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($insumos[$j]->getCod_ins()); ?>">
                                                 <span class="material-icons" style="color: #0869fa;">edit</span>
@@ -86,6 +88,10 @@
                                 <p>
                                     <span class="material-icons" style="color: #0869fa;">straighten</span>
                                     Medida: <?php echo htmlspecialchars($insumos[$j]->getUni_med(), ENT_QUOTES, 'UTF-8'); ?>
+                                </p>
+                                <p>
+                                    <span class="material-icons" style="color: #0869fa;">attach_money</span>
+                                    Precio Total: S/.<?php echo htmlspecialchars($insumos[$j]->getPrecio_tot(), ENT_QUOTES, 'UTF-8'); ?>
                                 </p>
                                 <div class="card-actions">
                                     <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($insumos[$j]->getCod_ins()); ?>">
