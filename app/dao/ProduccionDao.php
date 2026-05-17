@@ -433,10 +433,12 @@ class ProduccionDao
             $nom_ins = $insumo->getNom_ins();
             $uni_med = $insumo->getUni_med();
             $stock = $insumo->getStock();
+            $precio = $insumo->getPrecio();
+            $precio_total = $insumo->getPrecio_tot();
 
-            $sql = "INSERT INTO insumo (nom_ins, uni_med, stock) values (?,?,?)";
+            $sql = "INSERT INTO insumo (nom_ins, uni_med, stock, precio, precio_tot) values (?,?,?,?,?)";
             $stmt = $this->conn->prepare($sql);
-            $stmt->bind_param("ssd", $nom_ins, $uni_med, $stock);
+            $stmt->bind_param("ssddd", $nom_ins, $uni_med, $stock, $precio, $precio_total);
             $stmt->execute();
             $cod_ins = $this->conn->insert_id;
 
@@ -488,7 +490,7 @@ class ProduccionDao
     public function calculoInsumosTotales($producto)
     {
         $insumos = array();
-        $stmt = $this->conn->prepare("SELECT pr.nom_prod,i.nom_ins, sum(i.stock) as total_stock FROM insumotoproduccion itop INNER JOIN produccion p ON itop.cod_procc = p.cod_procc INNER JOIN insumo i ON itop.cod_ins = i.cod_ins INNER JOIN productotoproducc prp ON prp.cod_procc = p.cod_procc INNER JOIN producto pr ON prp.cod_prod = pr.cod_prod WHERE p.est = '0' and pr.nom_prod = ? group by pr.nom_prod, i.nom_ins");
+        $stmt = $this->conn->prepare("SELECT pr.nom_prod,i.nom_ins, sum(i.stock) as total_stock, sum(i.precio_tot) as precio_total FROM insumotoproduccion itop INNER JOIN produccion p ON itop.cod_procc = p.cod_procc INNER JOIN insumo i ON itop.cod_ins = i.cod_ins INNER JOIN productotoproducc prp ON prp.cod_procc = p.cod_procc INNER JOIN producto pr ON prp.cod_prod = pr.cod_prod WHERE p.est = '0' and pr.nom_prod = ? group by pr.nom_prod, i.nom_ins");
         $stmt->bind_param("s", $producto);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -504,7 +506,7 @@ class ProduccionDao
                 'S/D',
                 $row['total_stock'],
                 'S/D',
-                'S/D'
+                $row['precio_total']
             );
             $insumos[] = $insumo;
         }
@@ -536,7 +538,7 @@ class ProduccionDao
     public function getInsumosForProduction()
     {
         $insumos = array();
-        $stmt = $this->conn->prepare("SELECT i.cod_ins, p.cod_procc, i.nom_ins, i.uni_med, i.stock FROM insumotoproduccion itop INNER JOIN produccion p ON itop.cod_procc = p.cod_procc INNER JOIN insumo i ON itop.cod_ins = i.cod_ins WHERE p.est = '0'");
+        $stmt = $this->conn->prepare("SELECT i.cod_ins, p.cod_procc, i.nom_ins, i.uni_med, i.stock, i.precio_tot FROM insumotoproduccion itop INNER JOIN produccion p ON itop.cod_procc = p.cod_procc INNER JOIN insumo i ON itop.cod_ins = i.cod_ins WHERE p.est = '0'");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
@@ -548,10 +550,10 @@ class ProduccionDao
                 'S/D',
                 'S/D',
                 'S/D',
-                $row['uni_med'],
+                'GR',
                 $row['stock'],
                 'S/D',
-                'S/D'
+                $row['precio_tot']
             );
             $insumo->setCod_ins($row['cod_ins']);
             $insumos[] = $insumo;

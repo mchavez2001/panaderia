@@ -1,20 +1,27 @@
 <?php
 require_once __DIR__ . '/../dao/ProduccionDao.php';
 require_once '../config/values_procc.php';
+require_once '../config/prices_produccion.php';
 
 class ProduccionController
 {
     private $produccionDao;
     private $cantForPan;
     private $cantForBiz;
+    private $precioForPan;
+    private $precioForBiz;
 
     public function __construct()
     {
         $this->produccionDao = new ProduccionDao();
         global $cantForPan;
         global $cantForBiz;
+        global $precioForPan;
+        global $precioForBiz;
         $this->cantForPan = $cantForPan;
         $this->cantForBiz = $cantForBiz;
+        $this->precioForPan = $precioForPan;
+        $this->precioForBiz = $precioForBiz;
     }
 
     public function obtenerCochesProduccion()
@@ -149,6 +156,8 @@ class ProduccionController
     {
         $cantInsPan = $this->cantForPan;
         $cantInsBiz = $this->cantForBiz;
+        $precioForPan = $this->precioForPan;
+        $precioForBiz = $this->precioForBiz;
         $namesInsPan = array_keys($cantInsPan);
         $cantBolsas = $produccion->getCant_prod();
         $cantExtra = $produccion->getCant_extra();
@@ -158,21 +167,17 @@ class ProduccionController
                     switch ($produccion->getTam_prod()) {
                         case 'Pequeño':
                             $cantPan = $cantBolsas * 42 + $cantExtra;
-                            #3,466
-                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 42), 2), '', '');
-                            #print_r($insumo);
+                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 42), 2), $precioForPan[$namesInsPan[$i]], round($precioForPan[$namesInsPan[$i]] * $cantPan / (16.67 * 42), 2));
                             $this->produccionDao->insertInsToProcc($produccion->getCod_prod(), $insumo);
                             break;
                         case 'Mediano':
                             $cantPan = $cantBolsas * 21 + $cantExtra;
-                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 21), 2), '', '');
-                            #print_r($insumo);
+                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 21), 2), $precioForPan[$namesInsPan[$i]], round($precioForPan[$namesInsPan[$i]] * $cantPan / (16.67 * 21), 2));
                             $this->produccionDao->insertInsToProcc($produccion->getCod_prod(), $insumo);
                             break;
                         case 'Grande':
                             $cantPan = $cantBolsas * 18 + $cantExtra;
-                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 18), 2), '', '');
-                            #print_r($insumo);
+                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 18), 2), $precioForPan[$namesInsPan[$i]], round($precioForPan[$namesInsPan[$i]] * $cantPan / (16.67 * 18), 2));
                             $this->produccionDao->insertInsToProcc($produccion->getCod_prod(), $insumo);
                             break;
                     }
@@ -181,28 +186,25 @@ class ProduccionController
                     switch ($produccion->getTam_prod()) {
                         case 'Pequeño':
                             $cantBiz = $cantBolsas * 42 + $cantExtra;
-                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsBiz[$namesInsPan[$i]] * $cantBiz / (18.57 * 42), 2), '', '');
-                            #print_r($insumo);
+                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsBiz[$namesInsPan[$i]] * $cantBiz / (18.57 * 42), 2), $precioForBiz[$namesInsPan[$i]], round($precioForBiz[$namesInsPan[$i]] * $cantBiz / (18.57 * 42), 2));
                             $this->produccionDao->insertInsToProcc($produccion->getCod_prod(), $insumo);
                             break;
                         case 'Grande':
                             $cantBiz = $cantBolsas * 18 + $cantExtra;
-                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsBiz[$namesInsPan[$i]] * $cantBiz / (18.57 * 18), 2), '', '');
-                            #print_r($insumo);
+                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsBiz[$namesInsPan[$i]] * $cantBiz / (18.57 * 18), 2), $precioForBiz[$namesInsPan[$i]], '');
                             $this->produccionDao->insertInsToProcc($produccion->getCod_prod(), $insumo);
                             break;
                     }
                     break;
             }
         }
-        #$this->produccionDao->insertarInsumosProduccionTotalPorTipo();
     }
 
     public function calularInsumosProduccionTotalPorTipo()
     {
         return $this->produccionDao->insertarInsumosProduccionTotalPorTipo();
     }
-    
+
     public function obtenerInsumosProduccion()
     {
         return $this->produccionDao->getInsumosForProduction();
