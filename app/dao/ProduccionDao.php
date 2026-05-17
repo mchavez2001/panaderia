@@ -283,7 +283,7 @@ class ProduccionDao
     public function getProductosForProduction()
     {
         $productos = array();
-        $stmt = $this->conn->prepare("SELECT pr.unidades,pr.cod_procc, p.nom_prod, p.dscr_prod, pr.cant_extra, p.tam_prod, pr.cant_procc FROM productotoproducc prp INNER JOIN produccion pr ON prp.cod_procc = pr.cod_procc INNER JOIN producto p ON prp.cod_prod = p.cod_prod WHERE pr.est = '0' ORDER BY nom_prod DESC, cant_procc ASC");
+        $stmt = $this->conn->prepare("SELECT pr.unidades,pr.cod_procc, p.nom_prod, p.dscr_prod, pr.cant_extra, p.tam_prod, pr.cant_procc FROM productotoproducc prp INNER JOIN produccion pr ON prp.cod_procc = pr.cod_procc INNER JOIN producto p ON prp.cod_prod = p.cod_prod WHERE pr.est = '0' ORDER BY cant_procc ASC");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
