@@ -62,7 +62,7 @@ class VentaDao
     public function getVentasbyCuenta($cod_cuenta)
     {
         $ventas = array();
-        $stmt = $this->conn->prepare("SELECT * FROM venta WHERE cod_cuenta = ? AND importe > 0 AND estado = '1' ORDER BY fecha DESC");
+        $stmt = $this->conn->prepare("SELECT * FROM venta WHERE cod_cuenta = ? AND importe > 0 AND estado = '1' ORDER BY fecha DESC, cod_venta DESC");
         $stmt->bind_param("i", $cod_cuenta);
         $stmt->execute();
         $result = $stmt->get_result();
