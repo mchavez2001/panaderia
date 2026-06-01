@@ -15,12 +15,72 @@ require_once 'nav.php';
 <body>
     <h2 style="text-align: center; color:#888888; margin-top: 20px">PANIFICADORA DEL NORTE CH&C</h2>
     <h2 style="text-align: center; color:#888888; margin-top: 20px">Bienvenido al sistema</h2>
+    <div id="grafico-insumos-precios" style="width: 100%; max-width: 1000px; height: auto; margin: 20px auto;"></div>
     <div id="grafico-insumos" style="width: 100%; max-width: 1000px; height: auto; margin: 20px auto;"></div>
     <div id="grafico-productos" style="width: 100%; max-width: 1000px; height: auto; margin: 20px auto;"></div>
     <div id="grafico-productos_produccion" style="width: 100%; max-width: 1000px; height: auto; margin: 20px auto;"></div>
 
     <script>
-        // Aquí tu variable PHP en JS
+        // insumos precios
+        const insumos = <?php echo $jsonData_insumos_precios; ?>;
+
+        // Agrupar por nombre
+        const fechas = [...new Set(insumos.map(i => i.fecha))]; // Fechas únicas
+        const insumosPorNombre = {};
+
+        insumos.forEach(i => {
+            if (!insumosPorNombre[i.nombre]) {
+                insumosPorNombre[i.nombre] = {
+                    x: [],
+                    y: []
+                };
+            }
+            insumosPorNombre[i.nombre].x.push(i.fecha);
+            insumosPorNombre[i.nombre].y.push(parseFloat(i.stock));
+        });
+
+        const trazas = Object.keys(insumosPorNombre).map(nombre => ({
+            x: insumosPorNombre[nombre].x,
+            y: insumosPorNombre[nombre].y,
+            type: 'scatter',
+            mode: 'lines+markers',
+            name: nombre
+        }));
+
+        const layout = {
+            title: {
+                text: 'Gasto en insumos por fechas de producción',
+                font: {
+                    size: 16
+                },
+                y: 0.9
+            },
+            xaxis: {
+                title: 'Fecha',
+
+            },
+            yaxis: {
+                title: 'Precio (S/.)',
+            },
+            legend: {
+                orientation: "h",
+                x: 0,
+                y: -0.3,
+                font: {
+                    size: 10
+                },
+            },
+            margin: {
+                t: 100,
+                b: 80
+            },
+        };
+
+        Plotly.newPlot('grafico-insumos', trazas, layout, {
+            responsive: true
+        });
+
+        // graficos stock de insumos
         const insumos = <?php echo $jsonData_insumos; ?>;
 
         // Agrupar por nombre

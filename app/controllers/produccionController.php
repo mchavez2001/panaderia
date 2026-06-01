@@ -98,6 +98,10 @@ class ProduccionController
     {
         return $this->produccionDao->getInsumosConsumidosinProduccion();
     }
+    public function obtenerInsumosPrecios()
+    {
+        return $this->produccionDao->getInsumosPreciosinProduccion();
+    }
     public function obtenerCantidadProductobyVenta()
     {
         return $this->produccionDao->getCantProductosbyVentas();
