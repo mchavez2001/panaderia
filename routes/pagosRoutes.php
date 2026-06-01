@@ -69,10 +69,6 @@ switch ($path) {
         break;
     case '/agregar_servicio':
         if (isset($_SESSION['user_id'])) {
-            $categorias = $serviciosController->obtenerCategorias();
-            $categorias_det = $serviciosController->obtenerCategorias_Det_1();
-            $subcategorias = $serviciosController->obtenerSubCategorias();
-            require_once '../app/views/createServicioView.php';
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($_POST['action'] == 'guardar') {
                     $servicio = new Servicio($_POST['categoria'], $_POST['subcategoria'], ucwords(trim($_POST['nombre'])), $_POST['dscr'], $_POST['tipo_gasto'], strtoupper(trim($_POST['proveedor'])));
@@ -85,6 +81,10 @@ switch ($path) {
                     exit();
                 }
             }
+            $categorias = $serviciosController->obtenerCategorias();
+            $categorias_det = $serviciosController->obtenerCategorias_Det_1();
+            $subcategorias = $serviciosController->obtenerSubCategorias();
+            require_once '../app/views/createServicioView.php';
         } else {
             header("Location: /panaderia/public/login");
         }
