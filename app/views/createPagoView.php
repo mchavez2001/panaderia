@@ -43,6 +43,7 @@
                             <option value="UNIDAD">UNIDAD</option>
                             <option value="GALONES">GALONES</option>
                             <option value="PAQUETES">PAQUETES</option>
+                            <option value="FARDO">FARDO</option>
                         </select><br>
                     </div>
                     <div class="input-wrapper">
