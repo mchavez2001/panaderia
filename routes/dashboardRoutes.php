@@ -15,10 +15,18 @@ if (isset($request['query'])) {
 switch ($path) {
     case '/dashboard':
         if (isset($_SESSION['user_id'])) {
+            $insumos_precios = $produccionController->obtenerInsumosPrecios();
             $insumos = $produccionController->obtenerInsumosConsumidos();
             $productos = $produccionController->obtenerCantidadProductobyVenta();
             $productos_produccion = $produccionController->obtenerCantidadProductobyProduccion();
             // Convierte los objetos Insumo a arrays para que JSON los entienda bien
+            $data_insumos_precios = array_map(function ($insumo) {
+                return [
+                    'nombre' => $insumo->getNom_ins(),     // nombre del insumo
+                    'fecha' => $insumo->getDscr(),        // asumimos que 'dscr' es la fecha
+                    'precio' => $insumo->getPrecio_tot(),       // cantidad en stock
+                ];
+            }, $insumos_precios);
             $data_insumos = array_map(function ($insumo) {
                 return [
                     'nombre' => $insumo->getNom_ins(),     // nombre del insumo
@@ -43,6 +51,7 @@ switch ($path) {
                 ];
             }, $productos_produccion);
             // Enviar la variable a la vista
+            $jsonData_insumos_precios = json_encode($data_insumos_precios);
             $jsonData_insumos = json_encode($data_insumos);
             $jsonData_productos = json_encode($data_productos);
             $jsonData_productos_produccion = json_encode($data_productos_produccion);
