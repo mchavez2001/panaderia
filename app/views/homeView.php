@@ -39,7 +39,7 @@ require_once 'nav.php';
             insumosPorNombre_precios[i.nombre].y.push(parseFloat(i.precio));
         });
 
-        const trazas = Object.keys(insumosPorNombre_precios).map(nombre => ({
+        const trazas_insumos_precios = Object.keys(insumosPorNombre_precios).map(nombre => ({
             x: insumosPorNombre_precios[nombre].x,
             y: insumosPorNombre_precios[nombre].y,
             type: 'scatter',
@@ -47,7 +47,7 @@ require_once 'nav.php';
             name: nombre
         }));
 
-        const layout = {
+        const layout_insumos_precios = {
             title: {
                 text: 'Gasto en insumos por fechas de producción',
                 font: {
@@ -76,7 +76,7 @@ require_once 'nav.php';
             },
         };
 
-        Plotly.newPlot('grafico-insumos-precios', trazas, layout, {
+        Plotly.newPlot('grafico-insumos-precios', trazas_insumos_precios, layout_insumos_precios, {
             responsive: true
         });
 
