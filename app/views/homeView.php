@@ -25,23 +25,23 @@ require_once 'nav.php';
         const insumos_precios = <?php echo $jsonData_insumos_precios; ?>;
 
         // Agrupar por nombre
-        const fechas = [...new Set(insumos_precios.map(i => i.fecha))]; // Fechas únicas
-        const insumosPorNombre = {};
+        const fechas_insumos_precios = [...new Set(insumos_precios.map(i => i.fecha))]; // Fechas únicas
+        const insumosPorNombre_precios = {};
 
         insumos_precios.forEach(i => {
-            if (!insumosPorNombre[i.nombre]) {
-                insumosPorNombre[i.nombre] = {
+            if (!insumosPorNombre_precios[i.nombre]) {
+                insumosPorNombre_precios[i.nombre] = {
                     x: [],
                     y: []
                 };
             }
-            insumosPorNombre[i.nombre].x.push(i.fecha);
-            insumosPorNombre[i.nombre].y.push(parseFloat(i.precio));
+            insumosPorNombre_precios[i.nombre].x.push(i.fecha);
+            insumosPorNombre_precios[i.nombre].y.push(parseFloat(i.precio));
         });
 
-        const trazas = Object.keys(insumosPorNombre).map(nombre => ({
-            x: insumosPorNombre[nombre].x,
-            y: insumosPorNombre[nombre].y,
+        const trazas = Object.keys(insumosPorNombre_precios).map(nombre => ({
+            x: insumosPorNombre_precios[nombre].x,
+            y: insumosPorNombre_precios[nombre].y,
             type: 'scatter',
             mode: 'lines+markers',
             name: nombre
@@ -76,7 +76,7 @@ require_once 'nav.php';
             },
         };
 
-        Plotly.newPlot('grafico-insumos', trazas, layout, {
+        Plotly.newPlot('grafico-insumos-precios', trazas, layout, {
             responsive: true
         });
 
