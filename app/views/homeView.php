@@ -22,13 +22,13 @@ require_once 'nav.php';
 
     <script>
         // insumos precios
-        const insumos = <?php echo $jsonData_insumos_precios; ?>;
+        const insumos_precios = <?php echo $jsonData_insumos_precios; ?>;
 
         // Agrupar por nombre
-        const fechas = [...new Set(insumos.map(i => i.fecha))]; // Fechas únicas
+        const fechas = [...new Set(insumos_precios.map(i => i.fecha))]; // Fechas únicas
         const insumosPorNombre = {};
 
-        insumos.forEach(i => {
+        insumos_precios.forEach(i => {
             if (!insumosPorNombre[i.nombre]) {
                 insumosPorNombre[i.nombre] = {
                     x: [],
@@ -36,7 +36,7 @@ require_once 'nav.php';
                 };
             }
             insumosPorNombre[i.nombre].x.push(i.fecha);
-            insumosPorNombre[i.nombre].y.push(parseFloat(i.stock));
+            insumosPorNombre[i.nombre].y.push(parseFloat(i.precio));
         });
 
         const trazas = Object.keys(insumosPorNombre).map(nombre => ({
