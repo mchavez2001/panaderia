@@ -214,6 +214,7 @@ switch ($path) {
                         $importe = (float)$_POST['old_importe'] - (float)$_POST['old_pasaje'] + (float)$_POST['pasaje'];
                         $venta = new Venta($_POST['cod_cuenta'], $_POST['cod_empleado'], $_POST['fecha_venta'], $importe, $_POST['pasaje'], $_POST['met_pag'], 1);
                         $venta->setCod_venta($_POST['cod_venta']);
+                        print_r($venta);
                         $ventasController->editarVenta($venta);
                         header("Location: /panaderia/public/registro_ventas");
                         exit();
