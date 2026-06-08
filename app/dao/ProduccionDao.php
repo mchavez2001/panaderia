@@ -759,7 +759,7 @@ class ProduccionDao
     public function getInsumosConsumidosinProduccion()
     {
         $insumos = array();
-        $stmt = $this->conn->prepare("SELECT i.nom_ins AS insumo, DATE(p.fech_ini) AS fecha, SUM(i.stock)/1000 AS total_stock FROM produccion p INNER JOIN insumotoproduccion itp ON p.cod_procc = itp.cod_procc INNER JOIN insumo i ON itp.cod_ins = i.cod_ins WHERE p.fech_ini >= '2026-06-01' AND i.uni_med != 'S/D' GROUP BY i.nom_ins, DATE(p.fech_ini) ORDER BY fecha DESC");
+        $stmt = $this->conn->prepare("SELECT i.nom_ins AS insumo, SUM(i.stock)/1000 AS total_stock, DATE(p.fech_ini) AS fecha FROM produccion p INNER JOIN insumotoproduccion itp ON p.cod_procc = itp.cod_procc INNER JOIN insumo i ON itp.cod_ins = i.cod_ins WHERE p.fech_ini >= '2026-06-01' AND i.uni_med = 'S/D' GROUP BY i.nom_ins, DATE(p.fech_ini) ORDER BY fecha DESC");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
@@ -783,7 +783,7 @@ class ProduccionDao
     public function getInsumosPreciosinProduccion()
     {
         $insumos = array();
-        $stmt = $this->conn->prepare("SELECT i.nom_ins as insumo, sum(i.precio_tot) AS precio_total, DATE(p.fech_ini) AS fecha FROM produccion p INNER JOIN insumotoproduccion itp ON p.cod_procc = itp.cod_procc INNER JOIN insumo i ON i.cod_ins = itp.cod_ins WHERE i.uni_med = 'S/D' GROUP BY i.nom_ins, p.fech_ini ORDER BY p.fech_ini DESC");
+        $stmt = $this->conn->prepare("SELECT i.nom_ins AS insumo, sum(i.precio_tot) AS precio_total, DATE(p.fech_ini) AS fecha FROM produccion p INNER JOIN insumotoproduccion itp ON p.cod_procc = itp.cod_procc INNER JOIN insumo i ON itp.cod_ins = i.cod_ins WHERE p.fech_ini >= '2026-06-01' AND i.uni_med = 'S/D' GROUP BY i.nom_ins, DATE(p.fech_ini) ORDER BY fecha DESC");
         $stmt->execute();
         $result = $stmt->get_result();
         while ($row = $result->fetch_assoc()) {
