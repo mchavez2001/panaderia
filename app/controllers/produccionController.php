@@ -171,17 +171,20 @@ class ProduccionController
                     switch ($produccion->getTam_prod()) {
                         case 'Pequeño':
                             $cantPan = $cantBolsas * 42 + $cantExtra;
-                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 42), 2), $precioForPan[$namesInsPan[$i]], round($precioForPan[$namesInsPan[$i]] * $cantPan / (16.67 * 42), 2));
+                            $stock = round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 42), 2);
+                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', $stock, $precioForPan[$namesInsPan[$i]], round($stock * $precioForPan[$namesInsPan[$i]], 2));
                             $this->produccionDao->insertInsToProcc($produccion->getCod_prod(), $insumo);
                             break;
                         case 'Mediano':
                             $cantPan = $cantBolsas * 21 + $cantExtra;
-                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 21), 2), $precioForPan[$namesInsPan[$i]], round($precioForPan[$namesInsPan[$i]] * $cantPan / (16.67 * 21), 2));
+                            $stock = round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 21), 2);
+                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', $stock, $precioForPan[$namesInsPan[$i]], round($stock * $precioForPan[$namesInsPan[$i]], 2));
                             $this->produccionDao->insertInsToProcc($produccion->getCod_prod(), $insumo);
                             break;
                         case 'Grande':
                             $cantPan = $cantBolsas * 18 + $cantExtra;
-                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 18), 2), $precioForPan[$namesInsPan[$i]], round($precioForPan[$namesInsPan[$i]] * $cantPan / (16.67 * 18), 2));
+                            $stock = round($cantInsPan[$namesInsPan[$i]] * $cantPan / (16.67 * 18), 2);
+                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', $stock, $precioForPan[$namesInsPan[$i]], round($stock * $precioForPan[$namesInsPan[$i]], 2));
                             $this->produccionDao->insertInsToProcc($produccion->getCod_prod(), $insumo);
                             break;
                     }
@@ -190,12 +193,14 @@ class ProduccionController
                     switch ($produccion->getTam_prod()) {
                         case 'Pequeño':
                             $cantBiz = $cantBolsas * 42 + $cantExtra;
-                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsBiz[$namesInsPan[$i]] * $cantBiz / (18.57 * 42), 2), $precioForBiz[$namesInsPan[$i]], round($precioForBiz[$namesInsPan[$i]] * $cantBiz / (18.57 * 42), 2));
+                            $stock = round($cantInsBiz[$namesInsPan[$i]] * $cantBiz / (18.57 * 42), 2);
+                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', $stock, $precioForBiz[$namesInsPan[$i]], round($stock * $precioForBiz[$namesInsPan[$i]], 2));
                             $this->produccionDao->insertInsToProcc($produccion->getCod_prod(), $insumo);
                             break;
                         case 'Grande':
                             $cantBiz = $cantBolsas * 18 + $cantExtra;
-                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', round($cantInsBiz[$namesInsPan[$i]] * $cantBiz / (18.57 * 18), 2), $precioForBiz[$namesInsPan[$i]], '');
+                            $stock = round($cantInsBiz[$namesInsPan[$i]] * $cantBiz / (18.57 * 18), 2);
+                            $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', $stock, $precioForBiz[$namesInsPan[$i]], round($stock * $precioForBiz[$namesInsPan[$i]], 2));
                             $this->produccionDao->insertInsToProcc($produccion->getCod_prod(), $insumo);
                             break;
                     }
