@@ -535,6 +535,37 @@ class ProduccionDao
         }
     }
 
+    public function calculoInsumosTotalesPorCoches($cod_coche, $producto, $insumos)
+    {
+        $currentDate = date('Y-m-d');
+        $estado_inicial = 0;
+        $sql = "INSERT INTO produccion (fech_ini, est) values (?,?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("si", $currentDate, $estado_inicial);
+        $stmt->execute();
+        $cod_procc = $this->conn->insert_id;
+
+        $sql = "INSERT INTO coche_to_produccion (cod_coche, cod_procc) values (?,?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $cod_coche, $cod_procc);
+        $stmt->execute();
+
+        $sql = "INSERT INTO producto (nom_prod) values (?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("s", $producto);
+        $stmt->execute();
+        $cod_prod = $this->conn->insert_id;
+
+        $sql = "INSERT INTO productotoproducc (cod_procc, cod_prod) values (?,?)";
+        $stmt = $this->conn->prepare($sql);
+        $stmt->bind_param("ii", $cod_procc, $cod_prod);
+        $stmt->execute();
+
+        for ($i = 0; $i < count($insumos); $i++) {
+            $this->insertInsToProcc($cod_procc, $insumos[$i]);
+        }
+    }
+
     public function getInsumosForProduction()
     {
         $insumos = array();
