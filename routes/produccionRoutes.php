@@ -224,12 +224,16 @@ switch ($path) {
             for ($i = 0; $i < count($producciones); $i++) {
                 $produccionController->calcularInsumosRequeridos($producciones[$i]);
             }
-            $produccionController->calularInsumosProduccionTotalPorTipo();
+            #$produccionController->calularInsumosProduccionTotalPorTipo();
+            $produccionController->calularInsumosProduccionTotalPorTipoBaseCoches();
             header("Location: /panaderia/public/produccion");
             exit();
         } else {
             header("Location: /panaderia/public/login");
         }
+        break;
+    case '/pruebacoches':
+        $produccionController->calularInsumosProduccionTotalPorTipoBaseCoches();
         break;
     case '/distribucion_insumos':
         $rutaDelete = 'eliminar_insumo_produccion';

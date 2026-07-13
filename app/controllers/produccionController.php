@@ -214,6 +214,36 @@ class ProduccionController
         return $this->produccionDao->insertarInsumosProduccionTotalPorTipo();
     }
 
+    public function calularInsumosProduccionTotalPorTipoBaseCoches()
+    {
+        $coches =  $this->produccionDao->getCocheForProduction();
+        $cantInsPan = $this->cantForPan;
+        $cantInsBiz = $this->cantForBiz;
+        $precioForPan = $this->precioForPan;
+        $precioForBiz = $this->precioForBiz;
+        $namesInsPan = array_keys($cantInsPan);
+        for ($j = 0; $j < count($coches); $j++) {
+            $insumos = [];
+            for ($i = 0; $i < count($cantInsPan); $i++) {
+                switch ($coches[$j]->getNom_prod()) {
+                    case 'Pan':
+                        $cantCoches = (int)$coches[$j]->getCant_prod();
+                        $stock = round($cantInsPan[$namesInsPan[$i]] * $cantCoches, 2);
+                        $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', $stock, $precioForPan[$namesInsPan[$i]], round($stock * $precioForPan[$namesInsPan[$i]], 2));
+                        $insumos[] = $insumo;
+                        break;
+                    case 'Bizcocho':
+                        $cantCoches = $coches[$j]->getCant_prod();
+                        $stock = round($cantInsBiz[$namesInsPan[$i]] * $cantCoches, 2);
+                        $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', $stock, $precioForBiz[$namesInsPan[$i]], round($stock * $precioForBiz[$namesInsPan[$i]], 2));
+                        $insumos[] = $insumo;
+                        break;
+                }
+            }
+            $this->produccionDao->calculoInsumosTotalesPorCoches((int)$coches[$j]->getCod_prod(), $coches[$j]->getNom_prod(), $insumos);
+        }
+    }
+
     public function obtenerInsumosProduccion()
     {
         return $this->produccionDao->getInsumosForProduction();
