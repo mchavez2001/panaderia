@@ -62,7 +62,7 @@
                                             </button>
                                         </td>
                                     </tr>
-                                <?php }
+                            <?php }
                             } ?>
                         </tbody>
                     </table>
@@ -102,11 +102,17 @@
                                     </button>
                                 </div>
                             </div>
-                        <?php }
+                    <?php }
                     } ?>
                 </div>
             </div>
         <?php endfor; ?>
+        <a class="btn-limpiar" href="limpiar_insumos_produccion" style="color:white;">
+            <span class="material-icons">
+                delete_sweep
+            </span>
+            Limpiar Insumos Calculados
+        </a>
 
         <a class="create" href="descuento_insumos_produccion">
             <span class="material-icons" style="color: white;">check_circle</span>Confirmar Insumos En Producción

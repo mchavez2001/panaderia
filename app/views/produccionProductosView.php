@@ -13,6 +13,23 @@
 
 <body>
     <?php require_once 'nav.php'; ?>
+    <?php if (isset($_SESSION['success_msg'])): ?>
+
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?php
+            echo $_SESSION['success_msg'];
+            unset($_SESSION['success_msg']);
+            ?>
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+            </button>
+        </div>
+
+    <?php endif; ?>
+
     <a class="back" href="coches_produccion">Volver</a>
     <div class="cuerpo">
         <h2 class="titulo-general">Lista De Productos a Producir</h2>
@@ -99,7 +116,8 @@
                         Unidades totales: <?php echo ($producto->getDscr_prod()); ?> unidades
                     </p>
                     <div class="card-actions">
-                        <!-- <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php #echo ($producto->getCod_prod()); ?>">
+                        <!-- <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php #echo ($producto->getCod_prod()); 
+                                                                                                                                ?>">
                             <span class="material-icons">edit</span>
                         </button> -->
                         <button type="button" class="btn-delete" data-id="<?php echo ($producto->getCod_prod()); ?>" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" style="background: none; border: none; cursor: pointer;">

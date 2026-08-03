@@ -13,6 +13,23 @@
 
 <body>
     <?php require_once 'nav.php'; ?>
+    <?php if (isset($_SESSION['success_msg'])): ?>
+
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <?php
+            echo $_SESSION['success_msg'];
+            unset($_SESSION['success_msg']);
+            ?>
+
+            <button
+                type="button"
+                class="btn-close"
+                data-bs-dismiss="alert">
+            </button>
+        </div>
+
+    <?php endif; ?>
+
     <a class="back" href="produccion">Volver</a>
     <div class="cuerpo">
         <h2 class="titulo-general">Lista De Coches a Producir</h2>
@@ -75,11 +92,11 @@
                     </p>
                     <div class="card-actions">
                         <form action="/panaderia/public/productos_produccion" method="get" style="display:inline;">
-                             <input type="hidden" name="id" value="<?php echo ($producto->getCod_prod()); ?>">
-                             <button type="submit" class="productos">
-                                 <span class="material-icons" style="color: #0869fa;">inventory</span>
-                             </button>
-                         </form>
+                            <input type="hidden" name="id" value="<?php echo ($producto->getCod_prod()); ?>">
+                            <button type="submit" class="productos">
+                                <span class="material-icons" style="color: #0869fa;">inventory</span>
+                            </button>
+                        </form>
                         <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($producto->getCod_prod()); ?>">
                             <span class="material-icons">edit</span>
                         </button>

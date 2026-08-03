@@ -440,4 +440,8 @@ class ProduccionController
             $this->produccionDao->sendProductoToInv($cod_inv_producto, $producto);
         }
     }
+    public function limpiarInsumosProduccion()
+    {
+        $this->produccionDao->limpiarInsumosProduccion();
+    }
 }

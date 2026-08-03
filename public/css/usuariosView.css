@@ -691,3 +691,32 @@ button.create .material-icons {
     align-content: center;
     width: 15%;
 }
+
+.btn-limpiar{
+    margin-top:10px;
+    background-color:#dc3545;
+    transition:.2s ease;
+    align-self:flex-end;
+    border-radius:20px;
+    padding:12px;
+    color:white;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+}
+
+.btn-limpiar:hover{
+    background-color:#bb2d3b;
+}
+
+@media (max-width: 768px) {
+
+    .btn-limpiar{
+        position: fixed;
+        bottom: 90px; /* encima del botón azul */
+        right: 20px;
+
+        z-index: 1000;
+    }
+
+}
