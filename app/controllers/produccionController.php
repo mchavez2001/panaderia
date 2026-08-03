@@ -227,13 +227,13 @@ class ProduccionController
             for ($i = 0; $i < count($cantInsPan); $i++) {
                 switch ($coches[$j]->getNom_prod()) {
                     case 'Pan':
-                        $cantCoches = (int)$coches[$j]->getCant_prod();
+                        $cantCoches = (float)$coches[$j]->getCant_prod();
                         $stock = round($cantInsPan[$namesInsPan[$i]] * $cantCoches, 2);
                         $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', $stock, $precioForPan[$namesInsPan[$i]], round($stock * $precioForPan[$namesInsPan[$i]], 2));
                         $insumos[] = $insumo;
                         break;
                     case 'Bizcocho':
-                        $cantCoches = $coches[$j]->getCant_prod();
+                        $cantCoches = (float)$coches[$j]->getCant_prod();
                         $stock = round($cantInsBiz[$namesInsPan[$i]] * $cantCoches, 2);
                         $insumo = new Insumo($namesInsPan[$i], '', '', '', '', '', '', 'gr', $stock, $precioForBiz[$namesInsPan[$i]], round($stock * $precioForBiz[$namesInsPan[$i]], 2));
                         $insumos[] = $insumo;

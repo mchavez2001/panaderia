@@ -262,7 +262,7 @@ class ProduccionDao
     public function getProductosForProductionbyCoches($id)
     {
         $productos = array();
-        $stmt = $this->conn->prepare("SELECT c.cod_coche, pr.unidades, pr.cod_procc, p.nom_prod, p.dscr_prod, p.tam_prod, pr.cant_procc, pr.cant_extra from coche c inner join coche_to_produccion ctp on c.cod_coche = ctp.cod_coche inner join produccion pr on ctp.cod_procc = pr.cod_procc inner join productotoproducc ptp on pr.cod_procc = ptp.cod_procc inner join producto p on ptp.cod_prod = p.cod_prod WHERE pr.est = '0' and c.cod_coche = ?");
+        $stmt = $this->conn->prepare("SELECT c.cod_coche, pr.lata, pr.unidades, pr.cod_procc, p.nom_prod, p.dscr_prod, p.tam_prod, pr.cant_procc, pr.cant_extra from coche c inner join coche_to_produccion ctp on c.cod_coche = ctp.cod_coche inner join produccion pr on ctp.cod_procc = pr.cod_procc inner join productotoproducc ptp on pr.cod_procc = ptp.cod_procc inner join producto p on ptp.cod_prod = p.cod_prod WHERE pr.est = '0' and c.cod_coche = ?");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         $result = $stmt->get_result();
@@ -275,6 +275,7 @@ class ProduccionDao
                 $row['cant_procc']
             );
             $producto->setCod_prod($row['cod_procc']);
+            $producto->setDetalle($row['lata']);
             $productos[] = $producto;
         }
         return $productos;

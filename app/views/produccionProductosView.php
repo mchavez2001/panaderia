@@ -23,12 +23,11 @@
                     <tr>
                         <th>ID</th>
                         <th>PRODUCTO</th>
-                        <th class="hidden-mobile">UNIDADES</th>
                         <th>TAMAÑO</th>
-                        <th>CANTIDAD</th>
-                        <th>UNIDAD</th>
+                        <th>LATAS</th>
+                        <th>BOLSAS</th>
                         <th>ADICIONAL</th>
-                        <th>UNIDAD</th>
+                        <th class="hidden-mobile">TOTAL</th>
                         <th></th>
                         <th></th>
                         <th></th>
@@ -39,12 +38,11 @@
                         <tr class="elementos">
                             <td><?php echo ($producto->getCod_prod()) ?></td>
                             <td><?php echo ($producto->getNom_prod()) ?></td>
-                            <td class="hidden-mobile"><?php echo ($producto->getDscr_prod()) ?></td>
                             <td style="text-align: center;"><?php echo ($producto->getTam_prod()) ?></td>
+                            <td style="text-align: center;"><?php echo ($producto->getDetalle()) ?></td>
                             <td style="text-align: center;"><?php echo ($producto->getCant_prod()) ?></td>
-                            <td style="text-align: center;">BOLSAS</td>
                             <td style="text-align: center;"><?php echo ($producto->getCant_extra()) ?></td>
-                            <td style="text-align: center;">UNIDADES</td>
+                            <td class="hidden-mobile"><?php echo ($producto->getDscr_prod()) ?></td>
                             <td style="text-align: center;">
                                 <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($producto->getCod_prod()); ?>">
                                     <span class="material-icons" style="color: #0869fa;">edit</span>
@@ -86,6 +84,10 @@
                     </p>
                     <p>
                         <span class="material-icons" style="color: #0869fa;">format_list_numbered</span>
+                        Cantidad: <?php echo ($producto->getDetalle()); ?> latas
+                    </p>
+                    <p>
+                        <span class="material-icons" style="color: #0869fa;">format_list_numbered</span>
                         Cantidad: <?php echo ($producto->getCant_prod()); ?> bolsas
                     </p>
                     <p>
@@ -97,9 +99,9 @@
                         Unidades totales: <?php echo ($producto->getDscr_prod()); ?> unidades
                     </p>
                     <div class="card-actions">
-                        <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php echo ($producto->getCod_prod()); ?>">
+                        <!-- <button type="button" class="edit" data-bs-toggle="modal" data-bs-target="#crearModal" data-id="<?php #echo ($producto->getCod_prod()); ?>">
                             <span class="material-icons">edit</span>
-                        </button>
+                        </button> -->
                         <button type="button" class="btn-delete" data-id="<?php echo ($producto->getCod_prod()); ?>" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" style="background: none; border: none; cursor: pointer;">
                             <span class="material-icons" style="color: red;">delete</span>
                         </button>
