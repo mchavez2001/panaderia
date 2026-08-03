@@ -95,37 +95,156 @@ class ProduccionDao
 
     public function deleteCoche($id)
     {
-        #Iniciar Transaccion
         $this->conn->begin_transaction();
 
         try {
-            #Primero buscamos el cod_prod en la tabla coche para eliminarlo
-            $stmt = $this->conn->prepare("SELECT * FROM coche WHERE cod_coche = ?");
-            $stmt->bind_param("s", $id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $row = $result->fetch_assoc();
-            #Variables de la tabla:
-            #cod_coche
-            #cod_prod
 
-            $cod_prod = $row['cod_prod'];
+            // Obtener producto cabecera del coche
+            $stmt = $this->conn->prepare("
+            SELECT cod_prod
+            FROM coche
+            WHERE cod_coche = ?
+        ");
 
-            #Eliminar Coche
-            $stmt = $this->conn->prepare("DELETE FROM coche WHERE cod_coche = ?");
             $stmt->bind_param("i", $id);
             $stmt->execute();
 
-            #Eliminar Producto
-            $stmt = $this->conn->prepare("DELETE FROM producto WHERE cod_prod = ?");
-            $stmt->bind_param("i", $cod_prod);
+            $result = $stmt->get_result();
+            $row = $result->fetch_assoc();
+
+            $cod_prod_cabecera = $row['cod_prod'];
+
+            // Arrays para guardar IDs a eliminar
+            $productos = [];
+            $insumos = [];
+
+            // Obtener producciones asociadas al coche
+            $stmt = $this->conn->prepare("
+            SELECT cod_procc
+            FROM coche_to_produccion
+            WHERE cod_coche = ?
+        ");
+
+            $stmt->bind_param("i", $id);
             $stmt->execute();
-            # Confirmar la transacción  
+
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+
+                $cod_procc = $row['cod_procc'];
+
+                // Obtener productos asociados a la producción
+                $stmtProd = $this->conn->prepare("
+                SELECT cod_prod
+                FROM productotoproducc
+                WHERE cod_procc = ?
+            ");
+
+                $stmtProd->bind_param("i", $cod_procc);
+                $stmtProd->execute();
+
+                $resultProd = $stmtProd->get_result();
+
+                while ($prod = $resultProd->fetch_assoc()) {
+                    $productos[] = $prod['cod_prod'];
+                }
+
+                // Obtener insumos asociados a la producción
+                $stmtIns = $this->conn->prepare("
+                SELECT cod_ins
+                FROM insumotoproduccion
+                WHERE cod_procc = ?
+            ");
+
+                $stmtIns->bind_param("i", $cod_procc);
+                $stmtIns->execute();
+
+                $resultIns = $stmtIns->get_result();
+
+                while ($ins = $resultIns->fetch_assoc()) {
+                    $insumos[] = $ins['cod_ins'];
+                }
+
+                // Eliminar relaciones
+                $stmtDelete = $this->conn->prepare("
+                DELETE FROM productotoproducc
+                WHERE cod_procc = ?
+            ");
+
+                $stmtDelete->bind_param("i", $cod_procc);
+                $stmtDelete->execute();
+
+                $stmtDelete = $this->conn->prepare("
+                DELETE FROM insumotoproduccion
+                WHERE cod_procc = ?
+            ");
+
+                $stmtDelete->bind_param("i", $cod_procc);
+                $stmtDelete->execute();
+
+                // Eliminar producción
+                $stmtDelete = $this->conn->prepare("
+                DELETE FROM produccion
+                WHERE cod_procc = ?
+            ");
+
+                $stmtDelete->bind_param("i", $cod_procc);
+                $stmtDelete->execute();
+            }
+
+            // Eliminar productos asociados a las producciones
+            foreach ($productos as $codProd) {
+
+                $stmtDelete = $this->conn->prepare("
+                DELETE FROM producto
+                WHERE cod_prod = ?
+            ");
+
+                $stmtDelete->bind_param("i", $codProd);
+                $stmtDelete->execute();
+            }
+
+            // Eliminar insumos asociados a las producciones
+            foreach ($insumos as $codIns) {
+
+                $stmtDelete = $this->conn->prepare("
+                DELETE FROM insumo
+                WHERE cod_ins = ?
+            ");
+
+                $stmtDelete->bind_param("i", $codIns);
+                $stmtDelete->execute();
+            }
+
+            // Eliminar coche
+            $stmt = $this->conn->prepare("
+            DELETE FROM coche
+            WHERE cod_coche = ?
+        ");
+
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+
+            // Eliminar producto cabecera
+            $stmt = $this->conn->prepare("
+            DELETE FROM producto
+            WHERE cod_prod = ?
+        ");
+
+            $stmt->bind_param("i", $cod_prod_cabecera);
+            $stmt->execute();
+
             $this->conn->commit();
         } catch (Exception $e) {
-            # Revertir la transacción en caso de error
+
             $this->conn->rollback();
-            throw $e;
+
+            echo "<pre>";
+            print_r($e);
+            echo "</pre>";
+
+            exit;
         }
     }
 
@@ -376,49 +495,128 @@ class ProduccionDao
     }
     public function deleteProduccion($cod_coche, $id)
     {
-        #Iniciar Transaccion
         $this->conn->begin_transaction();
 
         try {
-            #Primero buscamos el cod_procc en la tabla productotoproducc para ubicar el producto creado y eliminarlo
-            $productos = array();
-            $stmt = $this->conn->prepare("SELECT * FROM productotoproducc WHERE cod_procc = ?");
-            $stmt->bind_param("s", $id);
+
+            // ==========================================
+            // OBTENER PRODUCTO DE LA PRODUCCIÓN
+            // ==========================================
+
+            $stmt = $this->conn->prepare("
+            SELECT *
+            FROM productotoproducc
+            WHERE cod_procc = ?
+        ");
+
+            $stmt->bind_param("i", $id);
             $stmt->execute();
+
             $result = $stmt->get_result();
             $row = $result->fetch_assoc();
-            #Variables de la tabla:
-            #cod_match_prod_procc
-            #cod_procc
-            #cod_prod
 
             $cod_prod = $row['cod_prod'];
 
-            #Eliminar Conexion con tabla Produccion en tabla coche_to_produccion
-            $stmt = $this->conn->prepare("DELETE FROM coche_to_produccion WHERE cod_procc = ? AND cod_coche = ?");
+            // ==========================================
+            // OBTENER INSUMOS DE LA PRODUCCIÓN
+            // ==========================================
+
+            $insumos = [];
+
+            $stmt = $this->conn->prepare("
+            SELECT cod_ins
+            FROM insumotoproduccion
+            WHERE cod_procc = ?
+        ");
+
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+
+            $result = $stmt->get_result();
+
+            while ($rowIns = $result->fetch_assoc()) {
+                $insumos[] = $rowIns['cod_ins'];
+            }
+
+            // ==========================================
+            // ELIMINAR RELACIONES INSUMO-PRODUCCIÓN
+            // ==========================================
+
+            $stmt = $this->conn->prepare("
+            DELETE FROM insumotoproduccion
+            WHERE cod_procc = ?
+        ");
+
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+
+            // ==========================================
+            // ELIMINAR INSUMOS FÍSICOS
+            // ==========================================
+
+            foreach ($insumos as $codIns) {
+
+                $stmtDelete = $this->conn->prepare("
+                DELETE FROM insumo
+                WHERE cod_ins = ?
+            ");
+
+                $stmtDelete->bind_param("i", $codIns);
+                $stmtDelete->execute();
+            }
+
+            // ==========================================
+            // ELIMINAR RELACIÓN COCHE-PRODUCCIÓN
+            // ==========================================
+
+            $stmt = $this->conn->prepare("
+            DELETE FROM coche_to_produccion
+            WHERE cod_procc = ?
+            AND cod_coche = ?
+        ");
+
             $stmt->bind_param("ii", $id, $cod_coche);
             $stmt->execute();
 
-            #Eliminar Conexion con tabla Produccion en tabla productotoproducc
-            $stmt = $this->conn->prepare("DELETE FROM productotoproducc WHERE cod_match_prod_procc = ?");
-            $stmt->bind_param("i", $row['cod_match_prod_procc']);
-            $stmt->execute();
+            // ==========================================
+            // ELIMINAR RELACIÓN PRODUCTO-PRODUCCIÓN
+            // ==========================================
 
-            #Eliminar Producto
-            $cod_prod = $row['cod_prod'];
-            $stmt = $this->conn->prepare("DELETE FROM producto WHERE cod_prod = ?");
-            $stmt->bind_param("i", $cod_prod);
-            $stmt->execute();
-            echo ($cod_prod);
+            $stmt = $this->conn->prepare("
+            DELETE FROM productotoproducc
+            WHERE cod_procc = ?
+        ");
 
-            #Eliminar La produccion finalmente
-            $stmt = $this->conn->prepare("DELETE FROM produccion WHERE cod_procc = ?");
             $stmt->bind_param("i", $id);
             $stmt->execute();
-            # Confirmar la transacción
+
+            // ==========================================
+            // ELIMINAR PRODUCTO
+            // ==========================================
+
+            $stmt = $this->conn->prepare("
+            DELETE FROM producto
+            WHERE cod_prod = ?
+        ");
+
+            $stmt->bind_param("i", $cod_prod);
+            $stmt->execute();
+
+            // ==========================================
+            // ELIMINAR PRODUCCIÓN
+            // ==========================================
+
+            $stmt = $this->conn->prepare("
+            DELETE FROM produccion
+            WHERE cod_procc = ?
+        ");
+
+            $stmt->bind_param("i", $id);
+            $stmt->execute();
+
             $this->conn->commit();
         } catch (Exception $e) {
-            # Revertir la transacción en caso de error
+
             $this->conn->rollback();
             throw $e;
         }
@@ -871,5 +1069,164 @@ class ProduccionDao
             $productos[] = $producto;
         }
         return $productos;
+    }
+
+    public function limpiarInsumosProduccion()
+    {
+        $this->conn->begin_transaction();
+
+        try {
+
+            $insumos = [];
+            $productosConsolidados = [];
+            $produccionesConsolidadas = [];
+
+            /*
+        |--------------------------------------------------------------------------
+        | Obtener todos los insumos calculados
+        |--------------------------------------------------------------------------
+        */
+            $stmt = $this->conn->prepare("
+            SELECT cod_ins
+            FROM insumotoproduccion
+        ");
+
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+                $insumos[] = $row['cod_ins'];
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Obtener producciones consolidadas
+        |--------------------------------------------------------------------------
+        | Se crean mediante:
+        | INSERT INTO produccion (fech_ini, est)
+        | Por eso los demás campos quedan NULL
+        |--------------------------------------------------------------------------
+        */
+            $stmt = $this->conn->prepare("
+            SELECT cod_procc
+            FROM produccion
+            WHERE coche IS NULL
+            AND lata IS NULL
+            AND cant_procc IS NULL
+            AND cant_extra IS NULL
+            AND unidades IS NULL
+        ");
+
+            $stmt->execute();
+            $result = $stmt->get_result();
+
+            while ($row = $result->fetch_assoc()) {
+
+                $cod_procc = $row['cod_procc'];
+
+                $produccionesConsolidadas[] = $cod_procc;
+
+                /*
+            --------------------------------------------------------------
+            | Obtener productos creados por el consolidado
+            --------------------------------------------------------------
+            */
+                $stmtProd = $this->conn->prepare("
+                SELECT cod_prod
+                FROM productotoproducc
+                WHERE cod_procc = ?
+            ");
+
+                $stmtProd->bind_param("i", $cod_procc);
+                $stmtProd->execute();
+
+                $resultProd = $stmtProd->get_result();
+
+                while ($prod = $resultProd->fetch_assoc()) {
+                    $productosConsolidados[] = $prod['cod_prod'];
+                }
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Eliminar relaciones insumo-producción
+        |--------------------------------------------------------------------------
+        */
+            $stmt = $this->conn->prepare("
+            DELETE FROM insumotoproduccion
+        ");
+
+            $stmt->execute();
+
+            /*
+        |--------------------------------------------------------------------------
+        | Eliminar insumos físicos generados
+        |--------------------------------------------------------------------------
+        */
+            foreach ($insumos as $codIns) {
+
+                $stmtDelete = $this->conn->prepare("
+                DELETE FROM insumo
+                WHERE cod_ins = ?
+            ");
+
+                $stmtDelete->bind_param("i", $codIns);
+                $stmtDelete->execute();
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Eliminar relaciones producto-producción de consolidados
+        |--------------------------------------------------------------------------
+        */
+            foreach ($produccionesConsolidadas as $codProcc) {
+
+                $stmtDelete = $this->conn->prepare("
+                DELETE FROM productotoproducc
+                WHERE cod_procc = ?
+            ");
+
+                $stmtDelete->bind_param("i", $codProcc);
+                $stmtDelete->execute();
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Eliminar productos del consolidado
+        |--------------------------------------------------------------------------
+        */
+            foreach ($productosConsolidados as $codProd) {
+
+                $stmtDelete = $this->conn->prepare("
+                DELETE FROM producto
+                WHERE cod_prod = ?
+            ");
+
+                $stmtDelete->bind_param("i", $codProd);
+                $stmtDelete->execute();
+            }
+
+            /*
+        |--------------------------------------------------------------------------
+        | Eliminar producciones consolidadas
+        |--------------------------------------------------------------------------
+        */
+            foreach ($produccionesConsolidadas as $codProcc) {
+
+                $stmtDelete = $this->conn->prepare("
+                DELETE FROM produccion
+                WHERE cod_procc = ?
+            ");
+
+                $stmtDelete->bind_param("i", $codProcc);
+                $stmtDelete->execute();
+            }
+
+            $this->conn->commit();
+        } catch (Exception $e) {
+
+            $this->conn->rollback();
+            throw $e;
+        }
     }
 }

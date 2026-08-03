@@ -74,6 +74,7 @@ switch ($path) {
             if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 if ($_POST['action'] == 'eliminar') {
                     $produccionController->eliminarCoche($_POST['id']);
+                    $_SESSION['success_msg'] = "Coche eliminado correctamente. Los insumos calculados deberán reiniciarse y calcularse nuevamente.";
                     header("Location: /panaderia/public/coches_produccion");
                     exit();
                 } else {
@@ -186,6 +187,7 @@ switch ($path) {
                 if ($_POST['action'] == 'eliminar') {
                     $cod_coche = $_SESSION['cod_coche'];
                     $produccionController->eliminarProduccionByID($cod_coche, $_POST['id']);
+                    $_SESSION['success_msg'] = "Producción eliminada correctamente. Los insumos calculados deberán reiniciarse y calcularse nuevamente.";
                     header("Location: /panaderia/public/productos_produccion?id=" . $_SESSION['cod_coche']);
                     exit();
                 } else {
@@ -290,6 +292,21 @@ switch ($path) {
             }
         }
         break;
+    case '/limpiar_insumos_produccion':
+
+        if (isset($_SESSION['user_id'])) {
+
+            $produccionController->limpiarInsumosProduccion();
+
+            header("Location: /panaderia/public/distribucion_insumos");
+            exit();
+        } else {
+
+            header("Location: /panaderia/public/login");
+        }
+
+        break;
+
     case '/descuento_insumos_produccion':
         if (isset($_SESSION['user_id'])) {
             $insumosInventario = $produccionController->obtenerInventarioInsumos(); #Insumos en el inventario
