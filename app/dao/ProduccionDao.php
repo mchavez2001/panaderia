@@ -1083,12 +1083,15 @@ class ProduccionDao
 
             /*
         |--------------------------------------------------------------------------
-        | Obtener todos los insumos calculados
+        | Obtener insumos asociados a producciones pendientes (est = 0)
         |--------------------------------------------------------------------------
         */
             $stmt = $this->conn->prepare("
-            SELECT cod_ins
-            FROM insumotoproduccion
+            SELECT DISTINCT itp.cod_ins
+            FROM insumotoproduccion itp
+            INNER JOIN produccion p
+                ON p.cod_procc = itp.cod_procc
+            WHERE p.est = 0
         ");
 
             $stmt->execute();
@@ -1100,17 +1103,14 @@ class ProduccionDao
 
             /*
         |--------------------------------------------------------------------------
-        | Obtener producciones consolidadas
-        |--------------------------------------------------------------------------
-        | Se crean mediante:
-        | INSERT INTO produccion (fech_ini, est)
-        | Por eso los demás campos quedan NULL
+        | Obtener producciones consolidadas pendientes (est = 0)
         |--------------------------------------------------------------------------
         */
             $stmt = $this->conn->prepare("
             SELECT cod_procc
             FROM produccion
-            WHERE coche IS NULL
+            WHERE est = 0
+            AND coche IS NULL
             AND lata IS NULL
             AND cant_procc IS NULL
             AND cant_extra IS NULL
@@ -1128,7 +1128,7 @@ class ProduccionDao
 
                 /*
             --------------------------------------------------------------
-            | Obtener productos creados por el consolidado
+            | Obtener productos asociados al consolidado
             --------------------------------------------------------------
             */
                 $stmtProd = $this->conn->prepare("
@@ -1149,18 +1149,22 @@ class ProduccionDao
 
             /*
         |--------------------------------------------------------------------------
-        | Eliminar relaciones insumo-producción
+        | Eliminar relaciones insumo-producción pendientes
         |--------------------------------------------------------------------------
         */
             $stmt = $this->conn->prepare("
-            DELETE FROM insumotoproduccion
+            DELETE itp
+            FROM insumotoproduccion itp
+            INNER JOIN produccion p
+                ON p.cod_procc = itp.cod_procc
+            WHERE p.est = 0
         ");
 
             $stmt->execute();
 
             /*
         |--------------------------------------------------------------------------
-        | Eliminar insumos físicos generados
+        | Eliminar insumos físicos obtenidos anteriormente
         |--------------------------------------------------------------------------
         */
             foreach ($insumos as $codIns) {
@@ -1192,7 +1196,7 @@ class ProduccionDao
 
             /*
         |--------------------------------------------------------------------------
-        | Eliminar productos del consolidado
+        | Eliminar productos consolidados
         |--------------------------------------------------------------------------
         */
             foreach ($productosConsolidados as $codProd) {
